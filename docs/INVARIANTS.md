@@ -1,6 +1,6 @@
 # Repository invariants
 
-**Audience:** maintainers and contributors.  
+**Audience:** maintainers and contributors.
 **Does not own:** public product narrative (that lives on the website).
 
 The website at [amonite.org](https://amonite.org) is the public source of truth for product identity, philosophy, capabilities, downloads, release presentation, and community.
@@ -9,17 +9,17 @@ Repository docs exist only to help people build, maintain, or contribute to this
 
 ## Sources of truth
 
-| Concept | Location |
-| --- | --- |
-| Public product | Website (`src/pages`, `src/data/distribution.ts`) |
-| This repo | `README.md` |
-| Contracts | `docs/INVARIANTS.md` |
-| Structure & deploy | `docs/WEBSITE_GUIDE.md` |
-| Writing for the site | `docs/EDITORIAL.md` |
-| Visual system | `docs/VISUAL.md`, `docs/ASSETS.md`, `src/styles/global.css` |
-| Contribution | `AGENTS.md` |
-| Legal / security | `ATTRIBUTION.md`, `SECURITY.md`, `LICENSE` |
-| Distribution project | https://github.com/ManuelGil/amonite |
+| Concept              | Location                                                    |
+| -------------------- | ----------------------------------------------------------- |
+| Public product       | Website (`src/pages`, `src/data/distribution.ts`)           |
+| This repo            | `README.md`                                                 |
+| Contracts            | `docs/INVARIANTS.md`                                        |
+| Structure & deploy   | `docs/WEBSITE_GUIDE.md`                                     |
+| Writing for the site | `docs/EDITORIAL.md`                                         |
+| Visual system        | `docs/VISUAL.md`, `docs/ASSETS.md`, `src/styles/global.css` |
+| Contribution         | `AGENTS.md`                                                 |
+| Legal / security     | `ATTRIBUTION.md`, `SECURITY.md`, `LICENSE`                  |
+| Distribution project | https://github.com/ManuelGil/amonite                        |
 
 ## Invariants
 

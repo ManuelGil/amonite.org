@@ -7,6 +7,7 @@ const path = Astro.url.pathname;
 const links = [
   { href: '/philosophy', label: 'Philosophy' },
   { href: '/engineering', label: 'Engineering' },
+  { href: '/gallery', label: 'Gallery' },
   { href: '/community', label: 'Community' },
   { href: '/downloads', label: 'Downloads' },
 ];
@@ -62,6 +63,7 @@ function isActive(href: string) {
             'shrink-0 font-medium',
             isActive(link.href) ? 'text-amber' : 'text-slate',
           ]}
+          aria-current={isActive(link.href) ? 'page' : undefined}
         >
           {link.label}
         </a>

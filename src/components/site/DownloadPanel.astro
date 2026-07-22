@@ -1,27 +1,16 @@
 ---
+/**
+ * Dark band pointing at /downloads. Facts in the system voice; one accent action.
+ */
 import ActionLink from './ActionLink.astro';
 import { DISTRIBUTION, DOWNLOAD_URL } from '../../consts';
-
-export interface Props {
-  /** Teaser on other pages links to /downloads. On the downloads page, primary opens releases. */
-  variant?: 'teaser' | 'page';
-}
-
-const { variant = 'teaser' } = Astro.props;
-const primaryHref = variant === 'page' ? DOWNLOAD_URL : '/downloads';
-const primaryExternal = variant === 'page';
-const primaryLabel =
-  variant === 'page' ? 'Open GitHub releases' : 'Downloads & verification';
 ---
 
 <aside class="border border-border bg-graphite text-mist">
   <div class="grid gap-8 p-8 sm:p-10 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:gap-12">
     <div>
-      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-sand">
+      <p class="label-mono font-medium text-sand">
         {DISTRIBUTION.series} · {DISTRIBUTION.stage}
-      </p>
-      <p class="mt-3 font-mono text-sm text-sand/90">
-        {DISTRIBUTION.name} {DISTRIBUTION.release}
       </p>
       <h2 class="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">
         Get the operating system
@@ -29,36 +18,27 @@ const primaryLabel =
       <p class="mt-3 max-w-xl text-sm leading-relaxed text-mist/75 sm:text-[0.95rem] sm:leading-relaxed">
         {DISTRIBUTION.releaseSummary}
       </p>
+      <p class="mt-5 font-mono text-xs text-mist/50">
+        {DISTRIBUTION.isoFileName} · SHA256 · GPG signed
+      </p>
     </div>
 
     <div class="flex flex-col gap-3 sm:items-stretch lg:items-end">
       <ActionLink
-        href={primaryHref}
+        href="/downloads"
         variant="accent"
-        external={primaryExternal}
         class="w-full justify-center sm:w-auto"
       >
-        {primaryLabel}
+        Downloads & verification
       </ActionLink>
-      {
-        variant === 'teaser' && (
-          <ActionLink
-            href={DOWNLOAD_URL}
-            variant="ghost"
-            external
-            class="text-center text-mist/80 decoration-mist/30 hover:text-mist hover:decoration-mist/60 sm:text-right"
-          >
-            Open GitHub releases
-          </ActionLink>
-        )
-      }
-      {
-        variant === 'page' && (
-          <p class="text-center text-sm text-mist/60 sm:text-right">
-            Verify checksums and signatures before writing media.
-          </p>
-        )
-      }
+      <ActionLink
+        href={DOWNLOAD_URL}
+        variant="ghost"
+        external
+        class="text-center text-mist/80 decoration-mist/30 hover:text-mist hover:decoration-mist/60 sm:text-right"
+      >
+        Open GitHub releases
+      </ActionLink>
     </div>
   </div>
 </aside>

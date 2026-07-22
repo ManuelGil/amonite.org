@@ -24,7 +24,7 @@ export const SOFTWARE_APPLICATION_JSONLD = {
   operatingSystem: 'Linux',
   softwareVersion: DISTRIBUTION.release,
   datePublished: '2026-07-22',
-  downloadUrl: DISTRIBUTION.downloadUrl,
+  downloadUrl: DISTRIBUTION.isoUrl,
   releaseNotes: DISTRIBUTION.artifacts.releaseNotes.href,
   author: {
     '@type': 'Person',

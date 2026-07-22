@@ -1,11 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/site/PageHeader.astro';
 ---
 
 <Layout title="Terms" description="Terms for the Amonite website.">
-  <article class="mx-auto max-w-2xl px-6 py-24 sm:py-32">
-    <h1 class="display-serif text-3xl text-graphite sm:text-4xl">Terms</h1>
-    <div class="mt-10 space-y-6 text-lg leading-8 text-slate">
+  <PageHeader eyebrow="Legal" title="Terms" />
+  <article class="mx-auto max-w-2xl px-6 py-16 sm:py-20">
+    <div class="space-y-6 text-base leading-relaxed text-slate">
       <p>You may read, link to, and share this website. It is provided without warranty.</p>
       <p>Website source is MIT-licensed. Third-party assets follow ATTRIBUTION.md.</p>
       <p>Amonite is created and maintained by Manuel Gil.</p>

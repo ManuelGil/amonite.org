@@ -2,13 +2,13 @@
 
 ## Ownership
 
-| | |
-| --- | --- |
-| **Purpose** | Record third-party asset licensing for this repository |
-| **Audience** | Maintainers and anyone redistributing assets |
-| **Owns** | Third-party image and font attribution / license references |
+|                  |                                                                                                                                               |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Purpose**      | Record third-party asset licensing for this repository                                                                                        |
+| **Audience**     | Maintainers and anyone redistributing assets                                                                                                  |
+| **Owns**         | Third-party image and font attribution / license references                                                                                   |
 | **Does not own** | Asset semantics ([docs/ASSETS.md](docs/ASSETS.md)); visual rules ([docs/VISUAL.md](docs/VISUAL.md)); whether an asset is currently used in UI |
-| **Dependencies** | [`docs/ASSETS.md`](docs/ASSETS.md) · `LICENSE` |
+| **Dependencies** | [`docs/ASSETS.md`](docs/ASSETS.md) · `LICENSE`                                                                                                |
 
 **Contract:** Licensing reference. Filenames here do not define architecture or usage.
 
@@ -38,6 +38,12 @@ The following images are included in the repository under the Unsplash License.
 All photographs remain subject to the Unsplash License.
 
 https://unsplash.com/license
+
+## Screenshots
+
+Files under `src/assets/screenshots/` are first-party captures of the Amonite
+operating system produced by the project. They are not third-party assets and
+are covered by the repository's own licensing.
 
 ## Fonts
 

@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ActionLink from '../components/site/ActionLink.astro';
+import PageHeader from '../components/site/PageHeader.astro';
+import Screenshot from '../components/site/Screenshot.astro';
+import firstBoot from '../assets/screenshots/first-boot.png';
+import terminalFastfetch from '../assets/screenshots/terminal-fastfetch.png';
+import welcomeHandbook from '../assets/screenshots/welcome-handbook.png';
+import welcomeYourSystem from '../assets/screenshots/welcome-your-system.png';
+import installerPartitions from '../assets/screenshots/installer-partitions.png';
+import fileManager from '../assets/screenshots/file-manager.png';
+import settingsManager from '../assets/screenshots/settings-manager.png';
+import applicationsMenu from '../assets/screenshots/applications-menu.png';
+import { DISTRIBUTION } from '../consts';
+---
+
+<Layout
+  title="Gallery"
+  description={`What ${DISTRIBUTION.name} ${DISTRIBUTION.series} ${DISTRIBUTION.stage} looks like as shipped: first boot, terminal, welcome handbook, installer, and everyday tools.`}
+  image={firstBoot}
+>
+  <PageHeader
+    eyebrow="Gallery"
+    title="The system as shipped"
+    lead={`Captures of ${DISTRIBUTION.name} ${DISTRIBUTION.release} running from the live ISO. Window images are cropped to the window. Nothing is staged or retouched.`}
+  />
+
+  <article class="mx-auto max-w-5xl space-y-16 px-6 py-16 sm:space-y-20 sm:py-20">
+    <section>
+      <Screenshot
+        image={firstBoot}
+        alt="Amonite live session at first boot, with the Welcome handbook and the installer open on an otherwise empty desktop"
+        label="01"
+        caption="First boot of the live session. The Welcome handbook and the installer open on an otherwise empty desktop. Everything else stays out of the way."
+        loading="eager"
+      />
+    </section>
+
+    <section>
+      <Screenshot
+        image={terminalFastfetch}
+        alt="Maximized terminal showing fastfetch output with the Amonite ASCII mark and system details"
+        label="02"
+        caption={`fastfetch in the maximized terminal, reporting the system as shipped: ${DISTRIBUTION.name} ${DISTRIBUTION.release} (${DISTRIBUTION.series}) on Debian, XFCE, 817 packages.`}
+      />
+    </section>
+
+    <section>
+      <div class="mb-8 max-w-xl">
+        <p class="label-mono font-medium text-amber">A first session</p>
+        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+          A system that explains itself
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-slate">
+          The Welcome handbook gives the live session a place to begin. Your System then shows
+          what is actually running.
+        </p>
+      </div>
+      <div class="grid gap-8 lg:grid-cols-2 lg:gap-10">
+        <Screenshot
+          image={welcomeHandbook}
+          alt="Amonite Welcome application on its Welcome page, explaining what Amonite is and why it stays minimal"
+          label="03"
+          caption="The Welcome handbook. A short introduction, not a control panel: what Amonite is, who it is for, and why it stays minimal."
+          sizes="(max-width: 1024px) 100vw, 30rem"
+        />
+        <Screenshot
+          image={welcomeYourSystem}
+          alt="Your System page of the Welcome application listing distribution, Debian version, desktop, kernel, and hardware"
+          label="04"
+          caption="Your System reports the installation in plain terms: distribution, Debian version, desktop, session, kernel, and hardware."
+          sizes="(max-width: 1024px) 100vw, 30rem"
+        />
+      </div>
+    </section>
+
+    <section>
+      <Screenshot
+        image={installerPartitions}
+        alt="Amonite installer (Calamares) at the partitioning step, offering erase disk, manual partitioning, and system encryption"
+        label="05"
+        caption="The installer (Calamares) at the partitioning step. Erase disk or partition manually; encrypted installation is a checkbox, not a project."
+        class="mx-auto max-w-3xl"
+        sizes="(max-width: 1024px) 100vw, 48rem"
+      />
+    </section>
+
+    <section>
+      <div class="mb-8 max-w-xl">
+        <p class="label-mono font-medium text-amber">Everyday work</p>
+        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+          Nothing between you and the desktop
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-slate">
+          Once the system is running, the ordinary tools are quiet and familiar: files, settings,
+          and the applications menu.
+        </p>
+      </div>
+      <div class="grid gap-8 lg:grid-cols-2 lg:gap-10">
+        <Screenshot
+          image={fileManager}
+          alt="Thunar file manager showing the home directory of the live user"
+          label="06"
+          caption="Thunar, the XFCE file manager, showing the ordinary home directory waiting for its first files."
+          sizes="(max-width: 1024px) 100vw, 30rem"
+        />
+        <Screenshot
+          image={settingsManager}
+          alt="XFCE Settings Manager with personal, hardware, and system sections"
+          label="07"
+          caption="The XFCE Settings Manager: familiar controls, close at hand, without another layer between you and the desktop."
+          sizes="(max-width: 1024px) 100vw, 30rem"
+        />
+      </div>
+    </section>
+
+    <section>
+      <Screenshot
+        image={applicationsMenu}
+        alt="Applications menu open over an empty desktop, listing terminal, file manager, mail reader, web browser, and category submenus"
+        label="08"
+        caption="The applications menu as shipped: a terminal, a file manager, mail, a browser, and the standard categories. The desktop behind it is intentionally bare."
+        class="mx-auto max-w-2xl"
+        sizes="(max-width: 1024px) 100vw, 42rem"
+      />
+    </section>
+
+    <section class="border-t border-border pt-10">
+      <div class="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
+        <div>
+          <h2 class="text-lg font-semibold tracking-tight text-graphite">
+            See it before you install
+          </h2>
+          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate">
+            These captures come from the validated QEMU/KVM configuration documented with the
+            release. The fastest way past screenshots is the live ISO itself.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <ActionLink href="/downloads">Downloads</ActionLink>
+        </div>
+      </div>
+    </section>
+  </article>
+</Layout>

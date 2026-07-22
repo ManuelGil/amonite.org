@@ -1,21 +1,22 @@
 # Website guide
 
-**Audience:** maintainers.  
-**Owns:** IA map, content workflow, deploy.  
+**Audience:** maintainers.
+**Owns:** IA map, content workflow, deploy.
 **Does not own:** public product copy (edit pages and `distribution.ts` instead).
 
 ## Surfaces
 
-| Path | Maintainer role |
-| --- | --- |
-| `/` | Introduction; points into the rest of the site |
-| `/philosophy` | Selection principles |
-| `/engineering` | Capabilities and how they are realized |
-| `/community` | Reddit + GitHub |
-| `/downloads` | Artifacts and verification |
-| `/privacy`, `/terms` | Legal |
+| Path                 | Maintainer role                                |
+| -------------------- | ---------------------------------------------- |
+| `/`                  | Introduction; points into the rest of the site |
+| `/philosophy`        | Selection principles                           |
+| `/engineering`       | Capabilities and how they are realized         |
+| `/gallery`           | Unedited captures of the released system       |
+| `/community`         | Reddit + GitHub                                |
+| `/downloads`         | Artifacts and verification                     |
+| `/privacy`, `/terms` | Legal                                          |
 
-Nav: Philosophy · Engineering · Community · Downloads (plus Download CTA).
+Nav: Philosophy · Engineering · Gallery · Community · Downloads (plus Download CTA).
 
 ## Content workflow
 

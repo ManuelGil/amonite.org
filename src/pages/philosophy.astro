@@ -1,18 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import ActionLink from '../components/site/ActionLink.astro';
-import FeatureCard from '../components/site/FeatureCard.astro';
 import PageHeader from '../components/site/PageHeader.astro';
-import SplitMedia from '../components/site/SplitMedia.astro';
-import philosophyImage from '../assets/img/philosophy.jpg';
-import transparencyImage from '../assets/img/transparency.jpg';
 import { DISTRIBUTION } from '../consts';
+import philosophyImage from '../assets/img/philosophy.jpg';
+
+const principles = [
+  {
+    title: 'Capability over accretion',
+    body: 'Software earns its place by enabling work. Transitive convenience is not enough.',
+  },
+  {
+    title: 'Replaceability',
+    body: 'Useful on day one must not become a trap on day thirty. Defaults stay open to substitution.',
+  },
+  {
+    title: 'User ownership',
+    body: 'The person at the keyboard remains in control. The operating system serves that ownership; it does not replace it.',
+  },
+];
 ---
 
 <Layout
   title="Philosophy"
   description="Why Amonite exists: every package earns its place by delivering a capability, without redefining Linux."
-  image={philosophyImage}
 >
   <PageHeader
     eyebrow="Philosophy"
@@ -21,79 +33,95 @@ import { DISTRIBUTION } from '../consts';
   />
 
   <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
-    <SplitMedia
-      image={philosophyImage}
-      alt="Natural form suggesting depth and permanence"
-      position="center 35%"
-    >
-      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        Why Amonite
-      </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        {DISTRIBUTION.selectionPrinciple}
-      </p>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        People who choose Linux usually know what it can become. Friction comes earlier: assembling a coherent day-one system from unrelated recommendations.
-      </p>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        Amonite shortens that day. It does not invent a new kind of Linux. It delivers a deliberate set of capabilities and leaves ownership with you.
-      </p>
-    </SplitMedia>
-
-    <div>
-      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        What makes it different
-      </h2>
-      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-        Difference is not a package count. It is a rule for what may ship.
-      </p>
-      <div class="mt-10 grid gap-5 md:grid-cols-3">
-        <FeatureCard title="Capability over accretion">
-          <p>
-            Software earns its place by enabling work. Transitive convenience is not enough.
-          </p>
-        </FeatureCard>
-        <FeatureCard title="Replaceability">
-          <p>
-            Useful on day one must not become a trap on day thirty. Defaults stay open to substitution.
-          </p>
-        </FeatureCard>
-        <FeatureCard title="User ownership">
-          <p>
-            The person at the keyboard remains in control. The operating system serves that ownership; it does not replace it.
-          </p>
-        </FeatureCard>
+    <section class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
+      <figure>
+        <Image
+          src={philosophyImage}
+          alt="Ammonite fossil showing its spiral chambers and layered stone"
+          class="aspect-[4/3] w-full object-cover"
+          width={1200}
+          sizes="(max-width: 1024px) 100vw, 32rem"
+          quality={82}
+          format="webp"
+        />
+        <figcaption class="mt-3 text-xs leading-relaxed text-slate">
+          A useful system begins with a clear shape.
+        </figcaption>
+      </figure>
+      <div class="max-w-2xl">
+        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+          Why Amonite
+        </h2>
+        <p class="display-serif border-l-2 border-amber pl-6 text-xl leading-relaxed text-graphite sm:text-2xl">
+          {DISTRIBUTION.selectionPrinciple}
+        </p>
+        <p class="mt-8 text-base leading-relaxed text-slate">
+          People who choose Linux usually know what it can become. Friction comes earlier:
+          assembling a coherent day-one system from unrelated recommendations.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-slate">
+          Amonite shortens that day. It does not invent a new kind of Linux. It delivers a
+          deliberate set of capabilities and leaves ownership with you.
+        </p>
       </div>
-    </div>
+    </section>
 
-    <SplitMedia
-      image={transparencyImage}
-      alt="Clear structure visible through layered material"
-      reverse
-      aspect="aspect-[5/4]"
-    >
+    <section>
+      <div class="max-w-2xl">
+        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+          What makes it different
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-slate">
+          Difference is not a package count. It is a rule for what may ship.
+        </p>
+      </div>
+      <div class="mt-10 grid gap-10 border-t border-border pt-8 md:grid-cols-3 md:gap-8">
+        {
+          principles.map((principle, i) => (
+            <div>
+              <span class="font-mono text-sm text-slate/60" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 class="mt-2 text-base font-semibold tracking-tight text-graphite">
+                {principle.title}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate">{principle.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-16">
       <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
         What Amonite does not claim
       </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        It does not claim to be the fastest, the most secure, or an “AI operating system.” Local AI is one capability among others: desktop, development, administration, networking, and security.
-      </p>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        Technology changes. The selection rule should not.
-      </p>
-    </SplitMedia>
-
-    <div class="grid gap-8 border border-border bg-sand/15 p-8 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10 sm:p-10">
-      <div>
-        <h2 class="text-lg font-semibold text-graphite">From principle to capabilities</h2>
-        <p class="mt-2 text-sm leading-relaxed text-slate">
-          See how day-one work is organized, and how implementation stays subordinate to outcomes.
+      <div class="max-w-2xl">
+        <p class="text-base leading-relaxed text-slate">
+          It does not claim to be the fastest, the most secure, or an “AI operating
+          system.” Local AI is one capability among others: desktop, development,
+          administration, networking, and security.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-slate">
+          Technology changes. The selection rule should not.
         </p>
       </div>
-      <div class="flex flex-wrap gap-3">
-        <ActionLink href="/engineering">Engineering</ActionLink>
-        <ActionLink href="/downloads" variant="secondary">Downloads</ActionLink>
+    </section>
+
+    <section class="border-t border-border pt-10">
+      <div class="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10">
+        <div>
+          <h2 class="text-lg font-semibold text-graphite">From principle to capabilities</h2>
+          <p class="mt-2 text-sm leading-relaxed text-slate">
+            See how day-one work is organized, and how implementation stays subordinate to
+            outcomes.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <ActionLink href="/engineering">Engineering</ActionLink>
+          <ActionLink href="/downloads" variant="secondary">Downloads</ActionLink>
+        </div>
       </div>
-    </div>
+    </section>
   </article>
 </Layout>

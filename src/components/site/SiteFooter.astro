@@ -14,21 +14,22 @@ const year = new Date().getFullYear();
       </div>
       <p class="max-w-xs text-sm leading-relaxed text-slate">
         An independent GNU/Linux distribution by Manuel Gil.
-        {DISTRIBUTION.series} {DISTRIBUTION.stage} is available now.
+        {` ${DISTRIBUTION.series} ${DISTRIBUTION.stage} is available now.`}
       </p>
     </div>
 
     <div>
-      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Project</p>
+      <p class="label-mono font-medium text-amber">Project</p>
       <ul class="mt-3 space-y-2 text-sm text-slate">
         <li><a href="/philosophy" class="hover:text-graphite">Philosophy</a></li>
         <li><a href="/engineering" class="hover:text-graphite">Engineering</a></li>
+        <li><a href="/gallery" class="hover:text-graphite">Gallery</a></li>
         <li><a href="/community" class="hover:text-graphite">Community</a></li>
       </ul>
     </div>
 
     <div>
-      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Get started</p>
+      <p class="label-mono font-medium text-amber">Get started</p>
       <ul class="mt-3 space-y-2 text-sm text-slate">
         <li><a href="/downloads" class="hover:text-graphite">Downloads</a></li>
         <li><a href={SOURCE_URL} class="hover:text-graphite">GitHub</a></li>
@@ -38,7 +39,7 @@ const year = new Date().getFullYear();
     </div>
 
     <div>
-      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Legal</p>
+      <p class="label-mono font-medium text-amber">Legal</p>
       <ul class="mt-3 space-y-2 text-sm text-slate">
         <li><a href="/privacy" class="hover:text-graphite">Privacy</a></li>
         <li><a href="/terms" class="hover:text-graphite">Terms</a></li>
@@ -49,7 +50,7 @@ const year = new Date().getFullYear();
   <div class="border-t border-border">
     <div class="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-5 text-xs text-slate/80 sm:flex-row sm:items-center sm:justify-between">
       <p>© {year} Manuel Gil. Website source under the MIT License.</p>
-      <p>Photographs: Unsplash License · ATTRIBUTION.md</p>
+      <p>Screenshots: unedited captures of the released system · ATTRIBUTION.md</p>
     </div>
   </div>
 </footer>

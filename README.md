@@ -19,20 +19,20 @@ pnpm preview
 ```
 
 Astro 7 · Tailwind 4 · GitHub Pages.
-Release and capability facts: `src/data/distribution.ts`.  
+Release and capability facts: `src/data/distribution.ts`.
 Tokens: `src/styles/global.css`.
 
 ## Maintainer docs
 
-| File | Purpose |
-| --- | --- |
-| [`AGENTS.md`](AGENTS.md) | How to work in this repo |
-| [`docs/INVARIANTS.md`](docs/INVARIANTS.md) | Contracts |
-| [`docs/WEBSITE_GUIDE.md`](docs/WEBSITE_GUIDE.md) | IA and deploy |
-| [`docs/EDITORIAL.md`](docs/EDITORIAL.md) | Public copy rules |
-| [`docs/VISUAL.md`](docs/VISUAL.md) | Visual system |
-| [`docs/ASSETS.md`](docs/ASSETS.md) | Asset catalog |
-| [`ATTRIBUTION.md`](ATTRIBUTION.md) / [`SECURITY.md`](SECURITY.md) / [`LICENSE`](LICENSE) | Legal |
+| File                                                                                     | Purpose                  |
+| ---------------------------------------------------------------------------------------- | ------------------------ |
+| [`AGENTS.md`](AGENTS.md)                                                                 | How to work in this repo |
+| [`docs/INVARIANTS.md`](docs/INVARIANTS.md)                                               | Contracts                |
+| [`docs/WEBSITE_GUIDE.md`](docs/WEBSITE_GUIDE.md)                                         | IA and deploy            |
+| [`docs/EDITORIAL.md`](docs/EDITORIAL.md)                                                 | Public copy rules        |
+| [`docs/VISUAL.md`](docs/VISUAL.md)                                                       | Visual system            |
+| [`docs/ASSETS.md`](docs/ASSETS.md)                                                       | Asset catalog            |
+| [`ATTRIBUTION.md`](ATTRIBUTION.md) / [`SECURITY.md`](SECURITY.md) / [`LICENSE`](LICENSE) | Legal                    |
 
 ## License
 

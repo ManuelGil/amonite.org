@@ -1,0 +1,61 @@
+---
+/**
+ * A captured state of the running system, presented as documentation.
+ * Every image passed here must be a real, unedited capture of Amonite.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  image: ImageMetadata;
+  alt: string;
+  caption?: string;
+  /** Figure label, e.g. "01". Rendered in the system voice. */
+  label?: string;
+  sizes?: string;
+  loading?: 'eager' | 'lazy';
+  class?: string;
+  /** Caption text color class; override on dark surfaces. */
+  captionClass?: string;
+}
+
+const {
+  image,
+  alt,
+  caption,
+  label,
+  sizes = '(max-width: 1024px) 100vw, 60rem',
+  loading = 'lazy',
+  class: className = '',
+  captionClass = 'text-slate',
+} = Astro.props;
+
+const widths = [480, 800, 1200, image.width].filter((w) => w <= image.width);
+---
+
+<figure class:list={[className]}>
+  <div class="border border-border bg-graphite">
+    <Image
+      src={image}
+      alt={alt}
+      class="h-auto w-full"
+      widths={widths}
+      sizes={sizes}
+      quality={82}
+      format="webp"
+      loading={loading}
+    />
+  </div>
+  {
+    caption && (
+      <figcaption class:list={['mt-3 flex gap-3 text-xs leading-relaxed', captionClass]}>
+        {label && (
+          <span class="label-mono shrink-0 text-amber" aria-hidden="true">
+            {label}
+          </span>
+        )}
+        <span>{caption}</span>
+      </figcaption>
+    )
+  }
+</figure>

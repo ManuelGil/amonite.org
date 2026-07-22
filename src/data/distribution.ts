@@ -10,6 +10,9 @@ const RELEASES =
 const RELEASE_TAG = 'v1.0.0-alpha' as const;
 const RELEASE_PAGE =
   `https://github.com/ManuelGil/amonite/releases/tag/${RELEASE_TAG}` as const;
+const ISO_FILE_NAME = 'amonite-1.0.0-alpha-amd64.iso' as const;
+const ISO_DOWNLOAD =
+  `https://github.com/ManuelGil/amonite/releases/download/${RELEASE_TAG}/${ISO_FILE_NAME}` as const;
 
 export const DISTRIBUTION = {
   name: 'Amonite',
@@ -23,6 +26,8 @@ export const DISTRIBUTION = {
   releaseSummary:
     'Nautilus is Version 1 of Amonite. The current release is 1.0.0-alpha.',
   isoPublished: true,
+  isoFileName: ISO_FILE_NAME,
+  isoUrl: ISO_DOWNLOAD,
   /** Supporting implementation. Use after capabilities, not instead of them. */
   platform: 'Debian Stable',
   desktop: 'XFCE',

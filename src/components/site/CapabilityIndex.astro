@@ -1,0 +1,41 @@
+---
+/**
+ * The capability set as a numbered index, read like a specification.
+ * `via` lines expose how each capability is realized; they stay
+ * subordinate to the outcome, never above it.
+ */
+import { DISTRIBUTION } from '../../consts';
+
+export interface Props {
+  showVia?: boolean;
+  class?: string;
+}
+
+const { showVia = false, class: className = '' } = Astro.props;
+---
+
+<ol class:list={['border-t border-border', className]}>
+  {
+    DISTRIBUTION.capabilities.map((item, i) => (
+      <li class="grid gap-x-8 gap-y-2 border-b border-border py-5 sm:grid-cols-[3.5rem_15rem_1fr] sm:py-6 lg:grid-cols-[4rem_16rem_1fr]">
+        <span class="font-mono text-sm text-slate/60" aria-hidden="true">
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <h3 class="text-base font-semibold tracking-tight text-graphite">
+          {item.title}
+        </h3>
+        <div class="text-sm leading-relaxed text-slate sm:col-start-3">
+          <p>{item.body}</p>
+          {showVia && (
+            <p class="mt-3 border-l-2 border-sand pl-3 text-[0.8125rem] leading-relaxed text-slate/90">
+              <span class="font-mono text-xs uppercase tracking-[0.08em] text-amber">
+                via{' '}
+              </span>
+              {item.via}
+            </p>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>

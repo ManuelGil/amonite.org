@@ -1,6 +1,6 @@
 # Security Policy
 
-**Scope:** this website repository only.  
+**Scope:** this website repository only.
 **Not in scope:** the Amonite GNU/Linux distribution (use that project's channels).
 
 ## Reporting

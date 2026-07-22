@@ -1,6 +1,6 @@
 # Editorial guide
 
-**Audience:** maintainers editing public copy.  
+**Audience:** maintainers editing public copy.
 **Does not own:** product facts (use `src/data/distribution.ts`) or visual tokens (`docs/VISUAL.md`).
 
 ## Voice

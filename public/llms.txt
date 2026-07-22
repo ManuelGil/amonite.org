@@ -9,6 +9,7 @@ Amonite is an independent distribution maintained by Manuel Gil. Every package s
 - [Home](https://amonite.org/): What Amonite is and what becomes possible after install.
 - [Philosophy](https://amonite.org/philosophy): Why Amonite exists and the selection principle behind every included package.
 - [Engineering](https://amonite.org/engineering): How capabilities (desktop, development, administration, security, networking, local AI) are implemented, and what stays replaceable.
+- [Gallery](https://amonite.org/gallery): Unedited screenshots of the released system: first boot, terminal, welcome handbook, installer, and everyday tools.
 - [Downloads](https://amonite.org/downloads): ISO, SHA256 checksum, GPG signature, release notes, and installation guide for the current release.
 - [Community](https://amonite.org/community): Reddit (r/amonite) for discussion, GitHub for releases and documentation.
 

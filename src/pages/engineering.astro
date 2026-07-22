@@ -2,18 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import ActionLink from '../components/site/ActionLink.astro';
-import FeatureCard from '../components/site/FeatureCard.astro';
+import CapabilityIndex from '../components/site/CapabilityIndex.astro';
 import PageHeader from '../components/site/PageHeader.astro';
-import SplitMedia from '../components/site/SplitMedia.astro';
+import Screenshot from '../components/site/Screenshot.astro';
+import terminalFastfetch from '../assets/screenshots/terminal-fastfetch.png';
+import installerPartitions from '../assets/screenshots/installer-partitions.png';
 import engineeringImage from '../assets/img/engineering.jpg';
-import workspaceImage from '../assets/img/workspace.jpg';
 import { DISTRIBUTION } from '../consts';
+
+const composition = [
+  { part: 'Platform', choice: DISTRIBUTION.platform },
+  { part: 'Desktop', choice: DISTRIBUTION.desktop },
+  { part: 'Terminal', choice: DISTRIBUTION.terminal },
+  { part: 'Installer', choice: DISTRIBUTION.installer },
+];
 ---
 
 <Layout
   title="Engineering"
   description="How Amonite realizes desktop, development, administration, security, and local AI capabilities after install."
-  image={engineeringImage}
+  image={terminalFastfetch}
 >
   <PageHeader
     eyebrow="Engineering"
@@ -22,66 +30,136 @@ import { DISTRIBUTION } from '../consts';
   />
 
   <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
-    <SplitMedia
-      image={engineeringImage}
-      alt="Precision tools laid out on a work surface"
-      position="center 45%"
-    >
-      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        The product is the protagonist
-      </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        {DISTRIBUTION.selectionPrinciple}
-      </p>
-    </SplitMedia>
+    <section class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-14">
+      <div>
+        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+          The product is the protagonist
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-slate">
+          The same rule shapes the composition: every default has a job to do, and remains
+          replaceable after install.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-slate">
+          The base composition is small enough to reason about. Everything below is
+          replaceable without fighting the system.
+        </p>
+      </div>
+      <div>
+        <table class="w-full border-t border-border text-sm">
+          <caption class="sr-only">Base composition of the system</caption>
+          <tbody>
+            {
+              composition.map((row) => (
+                <tr class="border-b border-border">
+                  <th
+                    scope="row"
+                    class="py-3 pr-6 text-left font-normal text-slate"
+                  >
+                    {row.part}
+                  </th>
+                  <td class="py-3 text-right font-mono text-[0.8125rem] text-graphite">
+                    {row.choice}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <p class="mt-3 text-xs leading-relaxed text-slate/80">
+          Defaults, not requirements. Each one remains replaceable after install.
+        </p>
+      </div>
+    </section>
 
-    <div>
+    <section class="grid gap-8 border-y border-border py-10 sm:grid-cols-[1.15fr_0.85fr] sm:items-center sm:gap-12">
+      <Image
+        src={engineeringImage}
+        alt="Mechanical watch movement with gears and precision components"
+        class="h-56 w-full object-cover sm:h-64"
+        width={1200}
+        sizes="(max-width: 640px) 100vw, 65vw"
+        quality={82}
+        format="webp"
+      />
+      <div>
+        <p class="label-mono font-medium text-amber">Composition</p>
+        <p class="mt-3 text-lg leading-relaxed text-graphite">
+          The details matter because they have to work together.
+        </p>
+      </div>
+    </section>
+
+    <section>
       <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        What becomes possible after install
+        How the capabilities take shape
       </h2>
       <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-        {DISTRIBUTION.series} {DISTRIBUTION.stage} is meant for real evaluation. Outcomes first.
+        {DISTRIBUTION.series} {DISTRIBUTION.stage} is meant for real evaluation. Outcomes come
+        first; each entry shows how the capability is realized.
       </p>
-      <div class="mt-10 grid gap-5 sm:grid-cols-2">
-        {
-          DISTRIBUTION.capabilities.map((item) => (
-            <FeatureCard title={item.title}>
-              <p>{item.body}</p>
-            </FeatureCard>
-          ))
-        }
-      </div>
-    </div>
+      <CapabilityIndex showVia class="mt-10" />
+    </section>
 
-    <SplitMedia
-      image={workspaceImage}
-      alt="Quiet workspace ready for focused work"
-      reverse
-      aspect="aspect-[5/4]"
-      position="center 30%"
-    >
-      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        Command line as a capability
-      </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        {DISTRIBUTION.cliSummary}
-      </p>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        Development and administration should not wait on assembling a toolchain.
-      </p>
-    </SplitMedia>
-
-    <div class="border border-border bg-sand/15 p-8 sm:p-10">
-      <h2 class="text-lg font-semibold text-graphite">
-        {DISTRIBUTION.series} · {DISTRIBUTION.stage}
-      </h2>
-      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate">
-        {DISTRIBUTION.releaseSummary}
-      </p>
-      <div class="mt-6 flex flex-wrap gap-3">
-        <ActionLink href="/downloads">Downloads</ActionLink>
-        <ActionLink href="/philosophy" variant="secondary">Philosophy</ActionLink>
+    <section class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
+      <Screenshot
+        image={terminalFastfetch}
+        alt="Maximized terminal on Amonite running fastfetch, showing the Amonite ASCII mark and system details"
+        caption={`The command line as shipped: fastfetch reporting ${DISTRIBUTION.name} ${DISTRIBUTION.release} on Debian, XFCE, 817 packages. Unedited capture from the live ISO.`}
+        sizes="(max-width: 1024px) 100vw, 36rem"
+      />
+      <div>
+        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+          Command line as a capability
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-slate">
+          {DISTRIBUTION.cliSummary}
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-slate">
+          Development and administration should not wait on assembling a toolchain.
+        </p>
       </div>
-    </div>
+    </section>
+
+    <section class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
+      <div class="lg:order-2">
+        <Screenshot
+          image={installerPartitions}
+          alt="Amonite installer at the partitioning step with erase disk, manual partitioning, and encryption options"
+          caption="The installer at the partitioning step. Encrypted installation is a checkbox."
+          sizes="(max-width: 1024px) 100vw, 36rem"
+        />
+      </div>
+      <div class="lg:order-1">
+        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+          Installation without ceremony
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-slate">
+          Calamares handles installation and disk setup, including encrypted layouts when
+          required. The installer asks what it needs and nothing more.
+        </p>
+        <p class="mt-6">
+          <ActionLink href="/gallery" variant="ghost">
+            See the system in the gallery →
+          </ActionLink>
+        </p>
+      </div>
+    </section>
+
+    <section class="border-t border-border pt-10">
+      <div class="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
+        <div>
+          <h2 class="text-lg font-semibold tracking-tight text-graphite">
+            {DISTRIBUTION.series} · {DISTRIBUTION.stage}
+          </h2>
+          <p class="mt-2 max-w-3xl text-sm leading-relaxed text-slate">
+            The current release, verification steps, and installation guidance are on Downloads.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <ActionLink href="/downloads">Downloads</ActionLink>
+          <ActionLink href="/philosophy" variant="secondary">Philosophy</ActionLink>
+        </div>
+      </div>
+    </section>
   </article>
 </Layout>
