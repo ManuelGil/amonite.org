@@ -1,0 +1,190 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ActionLink from '../components/site/ActionLink.astro';
+import PageHeader from '../components/site/PageHeader.astro';
+import { DISTRIBUTION, SOFTWARE_APPLICATION_JSONLD } from '../consts';
+
+const { validatedConfiguration, releaseHistory } = DISTRIBUTION;
+---
+
+<Layout
+  title="Downloads"
+  description={`Prepare to download, verify, and install Amonite ${DISTRIBUTION.series} ${DISTRIBUTION.stage}.`}
+  structuredData={[SOFTWARE_APPLICATION_JSONLD]}
+>
+  <PageHeader
+    eyebrow="Downloads"
+    title="Make Amonite your system."
+    lead={`Get ${DISTRIBUTION.name} ${DISTRIBUTION.series} ${DISTRIBUTION.stage} ready to install. Check your hardware, download the release, verify it, then install.`}
+  />
+
+  <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
+    <section class="border border-border bg-sand/15 p-8 sm:p-10">
+      <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">
+            Current release
+          </p>
+          <h2 class="mt-3 text-2xl font-semibold tracking-tight text-graphite sm:text-3xl">
+            {DISTRIBUTION.releaseLabel}
+          </h2>
+          <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+            {DISTRIBUTION.releaseSummary}
+          </p>
+          <dl class="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-4">
+            <div>
+              <dt class="text-sm text-slate">Series</dt>
+              <dd class="mt-1 font-medium text-graphite">{DISTRIBUTION.series}</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-slate">Stage</dt>
+              <dd class="mt-1 font-medium text-graphite">{DISTRIBUTION.stage}</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-slate">Version</dt>
+              <dd class="mt-1 font-medium text-graphite">{DISTRIBUTION.release}</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-slate">Release date</dt>
+              <dd class="mt-1 font-medium text-graphite">{DISTRIBUTION.releaseDate}</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="lg:pb-1">
+          <ActionLink href={DISTRIBUTION.artifacts.releaseNotes.href} external>
+            Open current GitHub Release
+          </ActionLink>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Before you download
+      </h2>
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+        {DISTRIBUTION.series} is Version {DISTRIBUTION.seriesMajor} of Amonite. This release is
+        Alpha software.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Validated configuration
+      </h2>
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+        This is the configuration used to validate the current Nautilus Alpha release. It is a
+        practical reference, not a statement of minimum or recommended requirements.
+      </p>
+      <dl class="mt-8 grid gap-5 sm:grid-cols-2">
+        <div class="border border-border bg-mist p-6">
+          <dt class="text-sm text-slate">Architecture</dt>
+          <dd class="mt-2 font-medium text-graphite">{validatedConfiguration.architecture}</dd>
+        </div>
+        <div class="border border-border bg-mist p-6">
+          <dt class="text-sm text-slate">CPU</dt>
+          <dd class="mt-2 font-medium text-graphite">
+            {validatedConfiguration.cpu}
+          </dd>
+        </div>
+        <div class="border border-border bg-mist p-6">
+          <dt class="text-sm text-slate">Memory</dt>
+          <dd class="mt-2 font-medium text-graphite">{validatedConfiguration.memory}</dd>
+        </div>
+        <div class="border border-border bg-mist p-6">
+          <dt class="text-sm text-slate">Storage</dt>
+          <dd class="mt-2 font-medium text-graphite">
+            {validatedConfiguration.storage}
+          </dd>
+        </div>
+        <div class="border border-border bg-mist p-6">
+          <dt class="text-sm text-slate">Firmware</dt>
+          <dd class="mt-2 font-medium text-graphite">{validatedConfiguration.firmware}</dd>
+        </div>
+        <div class="border border-border bg-mist p-6">
+          <dt class="text-sm text-slate">Virtualization platform</dt>
+          <dd class="mt-2 font-medium text-graphite">{validatedConfiguration.virtualization}</dd>
+        </div>
+      </dl>
+      <div class="mt-8 border-t border-border pt-8">
+        <h3 class="text-lg font-semibold tracking-tight text-graphite">Validation results</h3>
+        <ul class="mt-4 grid gap-x-8 gap-y-2 text-sm leading-relaxed text-slate sm:grid-cols-2">
+          {
+            validatedConfiguration.results.map((result) => (
+              <li>{result}</li>
+            ))
+          }
+        </ul>
+        <p class="mt-6 text-sm leading-relaxed text-slate">
+          Installed system size: <span class="font-medium text-graphite">{validatedConfiguration.installedSize}</span>.
+        </p>
+      </div>
+    </section>
+
+    <section class="grid gap-8 md:grid-cols-2">
+      <div class="border border-border bg-sand/15 p-8 sm:p-10">
+        <h2 class="text-xl font-semibold tracking-tight text-graphite">Installation</h2>
+        <p class="mt-3 text-base leading-relaxed text-slate">
+          Installation instructions are maintained on the official project website. Follow them
+          for writing the USB, starting the installer, and setting up the system.
+        </p>
+        <div class="mt-6">
+          <ActionLink href={DISTRIBUTION.artifacts.installGuide.href} external>
+            Read Installation Guide
+          </ActionLink>
+        </div>
+      </div>
+
+      <div id="verification" class="border border-border bg-sand/15 p-8 sm:p-10">
+        <h2 class="text-xl font-semibold tracking-tight text-graphite">Verification</h2>
+        <p class="mt-3 text-base leading-relaxed text-slate">
+          Every release includes a SHA256 checksum, a GPG signature, and signed release metadata.
+          Verify them before writing installation media so the image is complete and came from the
+          project.
+        </p>
+        <div class="mt-6">
+          <ActionLink href="#verification-steps" variant="secondary">
+            Read Verification Guide
+          </ActionLink>
+        </div>
+        <ol id="verification-steps" class="mt-6 space-y-2 text-sm leading-relaxed text-slate">
+          <li><span class="font-medium text-graphite">1.</span> Download the image and verification files from the current GitHub Release.</li>
+          <li><span class="font-medium text-graphite">2.</span> Compare the image checksum with the published SHA256 value.</li>
+          <li><span class="font-medium text-graphite">3.</span> Check the GPG signature and signed release metadata.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Release history
+      </h2>
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+        Previous releases remain available through GitHub. The list will grow as releases are
+        published.
+      </p>
+      <ul class="mt-8 divide-y divide-border border-x border-b border-border bg-mist">
+        {
+          releaseHistory.map((release) => (
+            <li class="flex flex-col gap-3 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div>
+                <p class="font-medium text-graphite">{release.label}</p>
+                <p class="mt-1 text-sm text-slate">{release.version}</p>
+              </div>
+              {
+                release.version === DISTRIBUTION.release ? (
+                  <p class="text-sm text-slate">Current release</p>
+                ) : (
+                  <ActionLink href={release.href} variant="ghost" external>
+                    Open release
+                  </ActionLink>
+                )
+              }
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+  </article>
+</Layout>

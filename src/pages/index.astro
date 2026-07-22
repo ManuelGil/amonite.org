@@ -1,0 +1,255 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import ActionLink from '../components/site/ActionLink.astro';
+import ExploreCard from '../components/site/ExploreCard.astro';
+import DownloadPanel from '../components/site/DownloadPanel.astro';
+import FeatureCard from '../components/site/FeatureCard.astro';
+import ProjectSupport from '../components/site/ProjectSupport.astro';
+import ReleaseFacts from '../components/site/ReleaseFacts.astro';
+import SplitMedia from '../components/site/SplitMedia.astro';
+import heroImage from '../assets/img/hero.jpg';
+import philosophyImage from '../assets/img/philosophy.jpg';
+import engineeringImage from '../assets/img/engineering.jpg';
+import workspaceImage from '../assets/img/workspace.jpg';
+import transparencyImage from '../assets/img/transparency.jpg';
+import {
+  DISTRIBUTION,
+  SITE_DESCRIPTION,
+  SOFTWARE_APPLICATION_JSONLD,
+} from '../consts';
+
+const desktop = DISTRIBUTION.capabilities.find((c) => c.title === 'Desktop Computing');
+const localAi = DISTRIBUTION.capabilities.find(
+  (c) => c.title === 'Local Artificial Intelligence',
+);
+---
+
+<Layout
+  title="Amonite"
+  description={SITE_DESCRIPTION}
+  image={heroImage}
+  structuredData={[SOFTWARE_APPLICATION_JSONLD]}
+>
+  <section class="relative overflow-hidden border-b border-border">
+    <div class="absolute inset-0">
+      <Image
+        src={heroImage}
+        alt="Calm alpine lake reflecting mountains at first light"
+        class="h-full w-full object-cover"
+        loading="eager"
+        fetchpriority="high"
+        widths={[640, 1024, 1600, 2400]}
+        sizes="100vw"
+        quality={78}
+        format="webp"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-graphite/88 via-graphite/55 to-graphite/25"></div>
+    </div>
+
+    <div class="relative mx-auto grid max-w-6xl gap-10 px-6 py-24 sm:py-28 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-14 lg:py-32">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.15em] text-sand">
+          GNU/Linux · {DISTRIBUTION.releaseLabel}
+        </p>
+        <h1 class="display-serif mt-4 text-4xl leading-[1.1] text-mist sm:text-5xl md:text-[3.25rem]">
+          Amonite
+        </h1>
+        <p class="mt-5 max-w-lg text-lg leading-relaxed text-mist/85">
+          {DISTRIBUTION.tagline}
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <ActionLink href="/downloads" variant="accent">
+            Download {DISTRIBUTION.series} {DISTRIBUTION.stage}
+          </ActionLink>
+          <ActionLink
+            href="/engineering"
+            variant="secondary"
+            class="border-mist/25 bg-transparent text-mist hover:border-mist/50 hover:bg-mist/10"
+          >
+            Explore capabilities
+          </ActionLink>
+        </div>
+      </div>
+
+      <div class="border border-mist/15 bg-graphite/40 p-6 backdrop-blur-sm sm:p-7">
+        <ReleaseFacts tone="dark" />
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+    <SplitMedia
+      image={transparencyImage}
+      alt="Clear structure visible through layered material"
+      position="center 40%"
+      aspect="aspect-[5/4]"
+    >
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">What it is</p>
+      <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+        An operating system defined by what it enables
+      </h2>
+      <p class="mt-5 text-base leading-relaxed text-slate sm:text-lg">
+        Amonite is a GNU/Linux operating system you can install today. After installation, desktop work, development, administration, networking, and local AI are already available.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-slate sm:text-lg">
+        {DISTRIBUTION.selectionPrinciple}
+      </p>
+      <p class="mt-6">
+        <ActionLink href="/philosophy" variant="ghost">Why Amonite exists →</ActionLink>
+      </p>
+    </SplitMedia>
+  </section>
+
+  <section class="border-y border-border bg-sand/20">
+    <div class="mx-auto max-w-6xl px-6 py-14 sm:py-16">
+      <DownloadPanel />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+    <div class="max-w-2xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Capabilities</p>
+      <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+        What becomes possible after install
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        The system is defined by the work it is ready for on day one, not by how it is built.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        DISTRIBUTION.capabilities.map((item) => (
+          <FeatureCard title={item.title}>
+            <p>{item.body}</p>
+          </FeatureCard>
+        ))
+      }
+    </div>
+  </section>
+
+  {
+    desktop && (
+      <section class="border-t border-border">
+        <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+          <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-14">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">
+                Desktop Computing
+              </p>
+              <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+                Everyday work from the first boot
+              </h2>
+              <p class="mt-4 text-base leading-relaxed text-slate">
+                The desktop is a complete environment for ordinary computing. Networking, multimedia, storage management, and web browsing are already part of it.
+              </p>
+            </div>
+            <div class="border border-border bg-mist p-6 sm:p-8">
+              <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">
+                Included in the desktop
+              </p>
+              <ul class="mt-4 space-y-3 text-sm leading-relaxed text-slate">
+                <li>Graphical environment</li>
+                <li>Networking</li>
+                <li>Multimedia</li>
+                <li>Storage management</li>
+                <li>Web browsing through Firefox ESR</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    localAi && (
+      <section class="border-t border-border bg-sand/15">
+        <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+          <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-14">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">
+                Local Artificial Intelligence
+              </p>
+              <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+                Inference on your machine
+              </h2>
+              <p class="mt-4 text-base leading-relaxed text-slate">
+                Local AI is one deliberate capability of the platform. It is not a label for the whole operating system.
+              </p>
+              <p class="mt-6">
+                <ActionLink href="/engineering" variant="ghost">
+                  How capabilities are engineered →
+                </ActionLink>
+              </p>
+            </div>
+            <div class="border border-border bg-mist p-6 sm:p-8">
+              <ul class="space-y-3 text-sm leading-relaxed text-slate">
+                <li>Execute compatible GGUF models locally</li>
+                <li>Run inference entirely offline</li>
+                <li>Keep models and prompts under your control</li>
+                <li>Use an OpenAI-compatible API for local applications</li>
+                <li>Build workflows without external services</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+    <div class="max-w-2xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">
+        Release series
+      </p>
+      <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+        {DISTRIBUTION.series}: Version {DISTRIBUTION.seriesMajor}, now in {DISTRIBUTION.stage}
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        {DISTRIBUTION.releaseSummary}
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        Defaults remain replaceable. Ownership of the machine stays with you.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-t border-border bg-sand/15">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <div class="max-w-2xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Continue</p>
+        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
+          Where to go next
+        </h2>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        <ExploreCard
+          href="/philosophy"
+          title="Philosophy"
+          description="Why every capability must justify its presence."
+          image={philosophyImage}
+          imageAlt="Natural form suggesting depth and permanence"
+        />
+        <ExploreCard
+          href="/engineering"
+          title="Engineering"
+          description="How capabilities are realized, and what stays replaceable."
+          image={engineeringImage}
+          imageAlt="Precision tools laid out on a work surface"
+        />
+        <ExploreCard
+          href="/community"
+          title="Community"
+          description="Discuss on Reddit. Follow releases on GitHub."
+          image={workspaceImage}
+          imageAlt="Quiet workspace ready for focused work"
+        />
+      </div>
+    </div>
+  </section>
+
+  <ProjectSupport />
+</Layout>

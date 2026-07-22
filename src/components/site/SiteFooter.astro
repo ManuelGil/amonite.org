@@ -1,0 +1,55 @@
+---
+import Logo from '../shared/Logo.astro';
+import { COMMUNITY_URL, DISTRIBUTION, SOURCE_URL, SPONSORS_URL } from '../../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-auto border-t border-border bg-sand/20">
+  <div class="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="sm:col-span-2 lg:col-span-1">
+      <div class="mb-3 flex items-center gap-2 text-graphite">
+        <Logo size="sm" />
+        <span class="text-sm font-semibold tracking-tight">Amonite</span>
+      </div>
+      <p class="max-w-xs text-sm leading-relaxed text-slate">
+        An independent GNU/Linux distribution by Manuel Gil.
+        {DISTRIBUTION.series} {DISTRIBUTION.stage} is available now.
+      </p>
+    </div>
+
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Project</p>
+      <ul class="mt-3 space-y-2 text-sm text-slate">
+        <li><a href="/philosophy" class="hover:text-graphite">Philosophy</a></li>
+        <li><a href="/engineering" class="hover:text-graphite">Engineering</a></li>
+        <li><a href="/community" class="hover:text-graphite">Community</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Get started</p>
+      <ul class="mt-3 space-y-2 text-sm text-slate">
+        <li><a href="/downloads" class="hover:text-graphite">Downloads</a></li>
+        <li><a href={SOURCE_URL} class="hover:text-graphite">GitHub</a></li>
+        <li><a href={COMMUNITY_URL} class="hover:text-graphite">Reddit</a></li>
+        <li><a href={SPONSORS_URL} class="hover:text-graphite">Sponsors</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.15em] text-amber">Legal</p>
+      <ul class="mt-3 space-y-2 text-sm text-slate">
+        <li><a href="/privacy" class="hover:text-graphite">Privacy</a></li>
+        <li><a href="/terms" class="hover:text-graphite">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-border">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-5 text-xs text-slate/80 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} Manuel Gil. Website source under the MIT License.</p>
+      <p>Photographs: Unsplash License · ATTRIBUTION.md</p>
+    </div>
+  </div>
+</footer>

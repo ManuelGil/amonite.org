@@ -1,0 +1,79 @@
+name: Bug Report
+description: Report a problem with the Amonite website
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem with the Amonite **website**.
+
+        Prefer r/amonite for distribution discussion. Use issues for clear, actionable website bugs.
+
+        **Do not use this form for security vulnerabilities.** See `SECURITY.md`.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Content / copy
+        - Layout / design
+        - Navigation
+        - Build / deployment
+        - Accessibility
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: astro-version
+    attributes:
+      label: Astro version (if known)
+      options:
+        - v7.x
+        - Other
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear description of what is wrong
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behaviour
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots
+
+  - type: input
+    id: device
+    attributes:
+      label: Device / browser
+      description: e.g., Firefox 140, Chromium on Linux

@@ -1,0 +1,60 @@
+---
+/**
+ * Compact series / stage identity for heroes and panels.
+ * Product-facing facts first; implementation stays off this surface.
+ */
+import { DISTRIBUTION } from '../../consts';
+
+export interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { tone = 'light', class: className = '' } = Astro.props;
+const isDark = tone === 'dark';
+---
+
+<dl class:list={['space-y-4 text-sm', className]}>
+  <div
+    class:list={[
+      'flex justify-between gap-4 border-b pb-3',
+      isDark ? 'border-mist/10' : 'border-border',
+    ]}
+  >
+    <dt class:list={[isDark ? 'text-mist/60' : 'text-slate']}>Series</dt>
+    <dd class:list={['font-medium', isDark ? 'text-mist' : 'text-graphite']}>
+      {DISTRIBUTION.series}
+      <span class:list={['font-normal', isDark ? 'text-mist/50' : 'text-slate']}>
+        {' '}(Version {DISTRIBUTION.seriesMajor})
+      </span>
+    </dd>
+  </div>
+  <div
+    class:list={[
+      'flex justify-between gap-4 border-b pb-3',
+      isDark ? 'border-mist/10' : 'border-border',
+    ]}
+  >
+    <dt class:list={[isDark ? 'text-mist/60' : 'text-slate']}>Stage</dt>
+    <dd class:list={['font-medium', isDark ? 'text-mist' : 'text-graphite']}>
+      {DISTRIBUTION.stage}
+    </dd>
+  </div>
+  <div
+    class:list={[
+      'flex justify-between gap-4 border-b pb-3',
+      isDark ? 'border-mist/10' : 'border-border',
+    ]}
+  >
+    <dt class:list={[isDark ? 'text-mist/60' : 'text-slate']}>Form</dt>
+    <dd class:list={['font-medium', isDark ? 'text-mist' : 'text-graphite']}>
+      Desktop OS
+    </dd>
+  </div>
+  <div class="flex justify-between gap-4">
+    <dt class:list={[isDark ? 'text-mist/60' : 'text-slate']}>Includes</dt>
+    <dd class:list={['font-medium text-right', isDark ? 'text-mist' : 'text-graphite']}>
+      Local AI
+    </dd>
+  </div>
+</dl>

@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import ActionLink from '../components/site/ActionLink.astro';
+import FeatureCard from '../components/site/FeatureCard.astro';
+import PageHeader from '../components/site/PageHeader.astro';
+import SplitMedia from '../components/site/SplitMedia.astro';
+import engineeringImage from '../assets/img/engineering.jpg';
+import workspaceImage from '../assets/img/workspace.jpg';
+import { DISTRIBUTION } from '../consts';
+---
+
+<Layout
+  title="Engineering"
+  description="How Amonite realizes desktop, development, administration, security, and local AI capabilities after install."
+  image={engineeringImage}
+>
+  <PageHeader
+    eyebrow="Engineering"
+    title="Capabilities first. Implementation second."
+    lead="Each default answers a practical question: what must be possible on day one, and what must remain easy to change later?"
+  />
+
+  <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
+    <SplitMedia
+      image={engineeringImage}
+      alt="Precision tools laid out on a work surface"
+      position="center 45%"
+    >
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        The product is the protagonist
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        {DISTRIBUTION.selectionPrinciple}
+      </p>
+    </SplitMedia>
+
+    <div>
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        What becomes possible after install
+      </h2>
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+        {DISTRIBUTION.series} {DISTRIBUTION.stage} is meant for real evaluation. Outcomes first.
+      </p>
+      <div class="mt-10 grid gap-5 sm:grid-cols-2">
+        {
+          DISTRIBUTION.capabilities.map((item) => (
+            <FeatureCard title={item.title}>
+              <p>{item.body}</p>
+            </FeatureCard>
+          ))
+        }
+      </div>
+    </div>
+
+    <SplitMedia
+      image={workspaceImage}
+      alt="Quiet workspace ready for focused work"
+      reverse
+      aspect="aspect-[5/4]"
+      position="center 30%"
+    >
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Command line as a capability
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        {DISTRIBUTION.cliSummary}
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        Development and administration should not wait on assembling a toolchain.
+      </p>
+    </SplitMedia>
+
+    <div class="border border-border bg-sand/15 p-8 sm:p-10">
+      <h2 class="text-lg font-semibold text-graphite">
+        {DISTRIBUTION.series} · {DISTRIBUTION.stage}
+      </h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate">
+        {DISTRIBUTION.releaseSummary}
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <ActionLink href="/downloads">Downloads</ActionLink>
+        <ActionLink href="/philosophy" variant="secondary">Philosophy</ActionLink>
+      </div>
+    </div>
+  </article>
+</Layout>

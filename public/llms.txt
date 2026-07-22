@@ -1,0 +1,26 @@
+# Amonite
+
+> Amonite is a GNU/Linux operating system engineered for what you do after install: desktop work, development, administration, and local AI. Current release: Nautilus · Alpha (1.0.0-alpha).
+
+Amonite is an independent distribution maintained by Manuel Gil. Every package ships because it delivers a meaningful capability, never because another package happened to recommend it. Defaults (XFCE desktop, Kitty terminal, Debian Stable base, Calamares installer) stay replaceable. Public discussion happens on Reddit; releases and documentation are published on GitHub. There is no roadmap, newsletter, or support inbox on this site.
+
+## Pages
+
+- [Home](https://amonite.org/): What Amonite is and what becomes possible after install.
+- [Philosophy](https://amonite.org/philosophy): Why Amonite exists and the selection principle behind every included package.
+- [Engineering](https://amonite.org/engineering): How capabilities (desktop, development, administration, security, networking, local AI) are implemented, and what stays replaceable.
+- [Downloads](https://amonite.org/downloads): ISO, SHA256 checksum, GPG signature, release notes, and installation guide for the current release.
+- [Community](https://amonite.org/community): Reddit (r/amonite) for discussion, GitHub for releases and documentation.
+
+## Facts
+
+- Series: Nautilus (Version 1). Stage: Alpha. Release: 1.0.0-alpha. Release date: July 22, 2026.
+- Base platform: Debian Stable. Default desktop: XFCE. Default terminal: Kitty. Installer: Calamares.
+- Capabilities: desktop computing, software development, system administration, local artificial intelligence (offline inference over GGUF models via llama.cpp with an OpenAI-compatible API), networking, security (AppArmor, optional encrypted installs), storage, documentation.
+- Source and releases: https://github.com/ManuelGil/amonite
+- Community: https://www.reddit.com/r/amonite/
+
+## Optional
+
+- [Privacy](https://amonite.org/privacy): Privacy notice for this website.
+- [Terms](https://amonite.org/terms): Terms for this website.

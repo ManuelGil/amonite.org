@@ -1,0 +1,72 @@
+---
+import Logo from '../shared/Logo.astro';
+import { COMMUNITY_URL, SOURCE_URL } from '../../consts';
+
+const path = Astro.url.pathname;
+
+const links = [
+  { href: '/philosophy', label: 'Philosophy' },
+  { href: '/engineering', label: 'Engineering' },
+  { href: '/community', label: 'Community' },
+  { href: '/downloads', label: 'Downloads' },
+];
+
+function isActive(href: string) {
+  return path === href || path.startsWith(`${href}/`);
+}
+---
+
+<header class="sticky top-0 z-40 border-b border-border/80 bg-mist/95 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3.5">
+    <a href="/" class="flex items-center gap-2 text-graphite" aria-label="Amonite home">
+      <Logo size="sm" />
+      <span class="text-sm font-semibold tracking-tight">Amonite</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-x-6 text-sm md:flex">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              'font-medium transition-colors',
+              isActive(link.href) ? 'text-amber' : 'text-slate hover:text-graphite',
+            ]}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3 text-sm">
+      <a href={SOURCE_URL} class="hidden font-medium text-slate hover:text-graphite sm:inline">
+        GitHub
+      </a>
+      <a
+        href="/downloads"
+        class="inline-flex items-center justify-center rounded-default bg-graphite px-3.5 py-1.5 text-sm font-medium text-mist hover:bg-graphite/90"
+      >
+        Download
+      </a>
+    </div>
+  </div>
+
+  <nav aria-label="Mobile" class="flex gap-4 overflow-x-auto border-t border-border/60 px-6 py-2.5 text-sm md:hidden">
+    {
+      links.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'shrink-0 font-medium',
+            isActive(link.href) ? 'text-amber' : 'text-slate',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))
+    }
+    <a href={COMMUNITY_URL} class="shrink-0 font-medium text-slate">Reddit</a>
+  </nav>
+</header>

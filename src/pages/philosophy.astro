@@ -1,0 +1,99 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ActionLink from '../components/site/ActionLink.astro';
+import FeatureCard from '../components/site/FeatureCard.astro';
+import PageHeader from '../components/site/PageHeader.astro';
+import SplitMedia from '../components/site/SplitMedia.astro';
+import philosophyImage from '../assets/img/philosophy.jpg';
+import transparencyImage from '../assets/img/transparency.jpg';
+import { DISTRIBUTION } from '../consts';
+---
+
+<Layout
+  title="Philosophy"
+  description="Why Amonite exists: every package earns its place by delivering a capability, without redefining Linux."
+  image={philosophyImage}
+>
+  <PageHeader
+    eyebrow="Philosophy"
+    title="Linux should remain Linux. Linux should remain yours."
+    lead="Amonite exists so the first day on a new machine delivers real capabilities, without rebuilding the system or giving up ownership of it."
+  />
+
+  <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
+    <SplitMedia
+      image={philosophyImage}
+      alt="Natural form suggesting depth and permanence"
+      position="center 35%"
+    >
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Why Amonite
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        {DISTRIBUTION.selectionPrinciple}
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        People who choose Linux usually know what it can become. Friction comes earlier: assembling a coherent day-one system from unrelated recommendations.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        Amonite shortens that day. It does not invent a new kind of Linux. It delivers a deliberate set of capabilities and leaves ownership with you.
+      </p>
+    </SplitMedia>
+
+    <div>
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        What makes it different
+      </h2>
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+        Difference is not a package count. It is a rule for what may ship.
+      </p>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        <FeatureCard title="Capability over accretion">
+          <p>
+            Software earns its place by enabling work. Transitive convenience is not enough.
+          </p>
+        </FeatureCard>
+        <FeatureCard title="Replaceability">
+          <p>
+            Useful on day one must not become a trap on day thirty. Defaults stay open to substitution.
+          </p>
+        </FeatureCard>
+        <FeatureCard title="User ownership">
+          <p>
+            The person at the keyboard remains in control. The operating system serves that ownership; it does not replace it.
+          </p>
+        </FeatureCard>
+      </div>
+    </div>
+
+    <SplitMedia
+      image={transparencyImage}
+      alt="Clear structure visible through layered material"
+      reverse
+      aspect="aspect-[5/4]"
+    >
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        What Amonite does not claim
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        It does not claim to be the fastest, the most secure, or an “AI operating system.” Local AI is one capability among others: desktop, development, administration, networking, and security.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        Technology changes. The selection rule should not.
+      </p>
+    </SplitMedia>
+
+    <div class="grid gap-8 border border-border bg-sand/15 p-8 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10 sm:p-10">
+      <div>
+        <h2 class="text-lg font-semibold text-graphite">From principle to capabilities</h2>
+        <p class="mt-2 text-sm leading-relaxed text-slate">
+          See how day-one work is organized, and how implementation stays subordinate to outcomes.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <ActionLink href="/engineering">Engineering</ActionLink>
+        <ActionLink href="/downloads" variant="secondary">Downloads</ActionLink>
+      </div>
+    </div>
+  </article>
+</Layout>

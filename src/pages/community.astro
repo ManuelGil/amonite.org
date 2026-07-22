@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ActionLink from '../components/site/ActionLink.astro';
+import FeatureCard from '../components/site/FeatureCard.astro';
+import PageHeader from '../components/site/PageHeader.astro';
+import ProjectSupport from '../components/site/ProjectSupport.astro';
+import SplitMedia from '../components/site/SplitMedia.astro';
+import workspaceImage from '../assets/img/workspace.jpg';
+import {
+  COMMUNITY_URL,
+  DISTRIBUTION,
+  SOURCE_URL,
+} from '../consts';
+---
+
+<Layout
+  title="Community"
+  description="Discuss Amonite on r/amonite. Follow releases and project documentation on GitHub."
+  image={workspaceImage}
+>
+  <PageHeader
+    eyebrow="Community"
+    title="Public discussion is the support channel"
+    lead="Questions and feedback belong on Reddit. Releases and project documentation are published on GitHub."
+  />
+
+  <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:py-20">
+    <SplitMedia
+      image={workspaceImage}
+      alt="Quiet workspace ready for focused work"
+      position="center 25%"
+    >
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Start on r/amonite
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        <a
+          href={COMMUNITY_URL}
+          class="text-graphite underline decoration-border underline-offset-[5px] hover:decoration-slate"
+        >
+          r/amonite
+        </a>
+        {' '}
+        is the primary public space for conversation. Ask about installs. Share what works. Report friction. Follow how {DISTRIBUTION.series} evolves.
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-slate">
+        There is no private support inbox. Discussion stays where others can learn from it.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ActionLink href={COMMUNITY_URL} external>Open r/amonite</ActionLink>
+        <ActionLink href="/downloads" variant="secondary">Downloads</ActionLink>
+      </div>
+    </SplitMedia>
+
+    <div>
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Where each channel fits
+      </h2>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        <FeatureCard title="Reddit">
+          <p>
+            Questions, feedback, and discussion about running {DISTRIBUTION.series} {DISTRIBUTION.stage}.
+          </p>
+          <p class="mt-4">
+            <ActionLink href={COMMUNITY_URL} variant="ghost" external>Open r/amonite →</ActionLink>
+          </p>
+        </FeatureCard>
+        <FeatureCard title="GitHub">
+          <p>
+            Releases, checksums, signatures, and public documentation for the current stage.
+          </p>
+          <p class="mt-4">
+            <ActionLink href={SOURCE_URL} variant="ghost" external>Open GitHub →</ActionLink>
+          </p>
+        </FeatureCard>
+        <FeatureCard title={`Run the ${DISTRIBUTION.stage}`}>
+          <p>
+            The fastest way to form an opinion is to install {DISTRIBUTION.series} and use it.
+          </p>
+          <p class="mt-4">
+            <ActionLink href="/downloads" variant="ghost">Downloads →</ActionLink>
+          </p>
+        </FeatureCard>
+      </div>
+    </div>
+  </article>
+
+  <ProjectSupport />
+</Layout>

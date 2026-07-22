@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../../assets/logo.png';
+
+export interface Props {
+  class?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { class: className = '', size = 'md' } = Astro.props;
+
+const sizeClasses = {
+  sm: 'size-5',
+  md: 'size-6',
+  lg: 'size-8',
+};
+---
+
+<Image
+  src={logo}
+  alt=""
+  aria-hidden="true"
+  class:list={[sizeClasses[size], 'shrink-0', className]}
+  widths={[20, 24, 32, 48]}
+  sizes="32px"
+  format="webp"
+/>

@@ -1,0 +1,35 @@
+---
+export interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'accent' | 'ghost';
+  class?: string;
+  external?: boolean;
+}
+
+const {
+  href,
+  variant = 'primary',
+  class: className = '',
+  external = false,
+} = Astro.props;
+
+const variants = {
+  primary: 'bg-graphite text-mist hover:bg-graphite/90',
+  secondary: 'border border-border bg-mist text-graphite hover:border-slate/40',
+  accent: 'bg-amber text-graphite hover:bg-sand',
+  ghost: 'text-graphite underline decoration-border underline-offset-[5px] hover:decoration-slate',
+};
+
+const base =
+  variant === 'ghost'
+    ? 'inline font-medium'
+    : 'inline-flex items-center justify-center rounded-default px-5 py-2.5 text-sm font-medium transition-colors';
+---
+
+<a
+  href={href}
+  class:list={[base, variants[variant], className]}
+  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+>
+  <slot />
+</a>

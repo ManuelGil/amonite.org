@@ -1,0 +1,12 @@
+---
+interface Props {
+  item: Record<string, unknown>;
+}
+
+const { item } = Astro.props;
+
+/** Prevent a literal "</script>" inside JSON-LD content from closing the script element early. */
+const json = JSON.stringify(item).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" set:html={json} />

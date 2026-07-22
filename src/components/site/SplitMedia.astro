@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  image: ImageMetadata;
+  alt: string;
+  caption?: string;
+  /** object-position hint, e.g. "center 30%" */
+  position?: string;
+  aspect?: string;
+  reverse?: boolean;
+}
+
+const {
+  image,
+  alt,
+  caption,
+  position = 'center',
+  aspect = 'aspect-[4/3]',
+  reverse = false,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'grid items-center gap-10 lg:grid-cols-2 lg:gap-14',
+    reverse && 'lg:[&>*:first-child]:order-2',
+  ]}
+>
+  <figure>
+    <div class:list={['overflow-hidden border border-border bg-sand/20', aspect]}>
+      <Image
+        src={image}
+        alt={alt}
+        class="h-full w-full object-cover"
+        style={`object-position: ${position}`}
+        widths={[480, 720, 960]}
+        sizes="(max-width: 1024px) 100vw, 50vw"
+        quality={75}
+        format="webp"
+        loading="lazy"
+      />
+    </div>
+    {
+      caption && (
+        <figcaption class="mt-3 text-xs leading-relaxed text-slate/80">{caption}</figcaption>
+      )
+    }
+  </figure>
+  <div class="max-w-xl">
+    <slot />
+  </div>
+</div>
