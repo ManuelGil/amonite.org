@@ -25,8 +25,6 @@ Verify releases against `src/data/distribution.ts`.
 
 Describe what users receive today. No roadmaps, milestones, or "coming soon."
 
-When `isoPublished` is false, do not invent downloads.
-
 ## Test
 
 Would this sentence fit any Linux distribution? If yes, rewrite until it is specifically Amonite.

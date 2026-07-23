@@ -27,14 +27,14 @@ import {
           GNU/Linux · {DISTRIBUTION.releaseLabel}
         </p>
         <h1 class="display-serif mt-4 text-5xl leading-none text-mist sm:text-6xl">
-          Amonite
+          {DISTRIBUTION.name}
         </h1>
         <p class="mt-6 max-w-md text-lg leading-relaxed text-mist/85">
           {DISTRIBUTION.tagline}
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <ActionLink href="/downloads" variant="accent">
-            Download {`${DISTRIBUTION.series} ${DISTRIBUTION.stage}`}
+            Download {DISTRIBUTION.releaseLabel}
           </ActionLink>
           <ActionLink
             href="/gallery"
@@ -101,7 +101,7 @@ import {
           What becomes possible after install
         </h2>
         <p class="mt-4 text-base leading-relaxed text-slate">
-          The system is defined by the work it is ready for on day one. Each of these eight
+          The system is defined by the work it is ready for on day one. Each of these {DISTRIBUTION.capabilities.length}
           capabilities has a reason to be here.
         </p>
       </div>

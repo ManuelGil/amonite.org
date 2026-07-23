@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/site/PageHeader.astro';
+import { SITE_AUTHOR } from '../consts';
 ---
 
 <Layout title="Terms" description="Terms for the Amonite website.">
@@ -9,7 +10,7 @@ import PageHeader from '../components/site/PageHeader.astro';
     <div class="space-y-6 text-base leading-relaxed text-slate">
       <p>You may read, link to, and share this website. It is provided without warranty.</p>
       <p>Website source is MIT-licensed. Third-party assets follow ATTRIBUTION.md.</p>
-      <p>Amonite is created and maintained by Manuel Gil.</p>
+      <p>Amonite is created and maintained by {SITE_AUTHOR}.</p>
     </div>
   </article>
 </Layout>

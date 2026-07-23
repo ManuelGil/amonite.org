@@ -10,29 +10,40 @@ const RELEASES =
 const RELEASE_TAG = 'v1.0.0-alpha' as const;
 const RELEASE_PAGE =
   `https://github.com/ManuelGil/amonite/releases/tag/${RELEASE_TAG}` as const;
-const ISO_FILE_NAME = 'amonite-1.0.0-alpha-amd64.iso' as const;
+const RELEASE_VERSION = '1.0.0-alpha' as const;
+const RELEASE_CODENAME = 'Nautilus' as const;
+const RELEASE_STAGE = 'Alpha' as const;
+const RELEASE_SERIES_MAJOR = 1 as const;
+const RELEASE_LABEL = `${RELEASE_CODENAME} · ${RELEASE_STAGE}` as const;
+const RELEASE_DATE = '2026-07-22' as const;
+const ISO_FILE_NAME = `amonite-${RELEASE_VERSION}-amd64.iso` as const;
 const ISO_DOWNLOAD =
   `https://github.com/ManuelGil/amonite/releases/download/${RELEASE_TAG}/${ISO_FILE_NAME}` as const;
+const PLATFORM = 'Debian Stable' as const;
+const DESKTOP = 'XFCE' as const;
+const TERMINAL = 'Kitty' as const;
+const INSTALLER = 'Calamares' as const;
 
 export const DISTRIBUTION = {
   name: 'Amonite',
-  series: 'Nautilus',
-  seriesMajor: 1,
-  stage: 'Alpha',
-  release: '1.0.0-alpha',
-  releaseDate: 'July 22, 2026',
-  releaseTag: RELEASE_TAG,
-  releaseLabel: 'Nautilus · Alpha',
+  series: RELEASE_CODENAME,
+  stage: RELEASE_STAGE,
+  release: RELEASE_VERSION,
+  releaseDate: RELEASE_DATE,
+  releaseLabel: RELEASE_LABEL,
   releaseSummary:
-    'Nautilus is Version 1 of Amonite. The current release is 1.0.0-alpha.',
-  isoPublished: true,
+    `${RELEASE_CODENAME} is Version ${RELEASE_SERIES_MAJOR} of Amonite. The current release is ${RELEASE_VERSION}.`,
   isoFileName: ISO_FILE_NAME,
   isoUrl: ISO_DOWNLOAD,
+  releaseArtifact: {
+    sizeBytes: 1275068416,
+    sha256: '9082c909314e37a4de261829fedcdedf970f777eefb47a78c749c22eca340acf',
+  },
   /** Supporting implementation. Use after capabilities, not instead of them. */
-  platform: 'Debian Stable',
-  desktop: 'XFCE',
-  terminal: 'Kitty',
-  installer: 'Calamares',
+  platform: PLATFORM,
+  desktop: DESKTOP,
+  terminal: TERMINAL,
+  installer: INSTALLER,
   sourceUrl: 'https://github.com/ManuelGil/amonite',
   communityUrl: 'https://www.reddit.com/r/amonite/',
   downloadUrl: RELEASES,
@@ -46,12 +57,12 @@ export const DISTRIBUTION = {
     {
       title: 'Desktop Computing',
       body: 'Everyday computing from the first login: a graphical environment with networking, multimedia, storage management, and web browsing ready without assembly.',
-      via: 'Default desktop: XFCE. Audio and multimedia through PipeWire. Web browsing through Firefox ESR, the browser maintained by the Debian project.',
+      via: `Default desktop: ${DESKTOP}. Audio and multimedia through PipeWire. Web browsing through Firefox ESR, the browser maintained by the Debian project.`,
     },
     {
       title: 'Software Development',
       body: 'Write, build, and debug software from the first session with a modern command-line environment prepared for search, automation, and structured data.',
-      via: 'Terminal default: Kitty. Development tools available without assembling a toolchain by hand.',
+      via: `Terminal default: ${TERMINAL}. Development tools available without assembling a toolchain by hand.`,
     },
     {
       title: 'System Administration',
@@ -71,12 +82,12 @@ export const DISTRIBUTION = {
     {
       title: 'Security',
       body: 'Application isolation and security policies enabled by default. Optional encrypted installation when you need it.',
-      via: 'AppArmor enabled. Encrypted installs supported through the graphical installer (Calamares).',
+      via: `AppArmor enabled. Encrypted installs supported through the graphical installer (${INSTALLER}).`,
     },
     {
       title: 'Storage',
       body: 'Install and manage disks with a clear graphical installer, including encrypted layouts when required.',
-      via: 'Calamares handles installation and disk setup.',
+      via: `${INSTALLER} handles installation and disk setup.`,
     },
     {
       title: 'Documentation',
@@ -98,7 +109,7 @@ export const DISTRIBUTION = {
       'Live ISO boot',
       'Graphical desktop',
       'Welcome application',
-      'Calamares installation',
+      `${INSTALLER} installation`,
       'First boot after installation',
       'System login',
       'Terminal',
@@ -109,38 +120,20 @@ export const DISTRIBUTION = {
   },
   releaseHistory: [
     {
-      label: 'Nautilus · Alpha',
-      version: '1.0.0-alpha',
+      label: RELEASE_LABEL,
+      version: RELEASE_VERSION,
       href: RELEASE_PAGE,
     },
   ] as const,
   artifacts: {
-    iso: {
-      label: 'ISO image',
-      href: RELEASE_PAGE,
-      note: 'Bootable image for the current Nautilus Alpha.',
-    },
-    checksum: {
-      label: 'SHA256 checksum',
-      href: RELEASE_PAGE,
-      note: 'Verify the ISO before writing media.',
-    },
-    signature: {
-      label: 'GPG signature',
-      href: RELEASE_PAGE,
-      note: 'Confirm the release was signed by the project.',
+    verifyGuide: {
+      href: 'https://github.com/ManuelGil/amonite/blob/main/VERIFY.md',
     },
     releaseNotes: {
-      label: 'Release Notes',
       href: RELEASE_PAGE,
-      note: 'Changes in this Alpha and known caveats.',
     },
     installGuide: {
-      label: 'Installation Guide',
-      href: 'https://github.com/ManuelGil/amonite#readme',
-      note: 'Install steps for the current Nautilus release.',
+      href: 'https://github.com/ManuelGil/amonite/blob/main/INSTALL.md',
     },
   },
 } as const;
-
-export type Distribution = typeof DISTRIBUTION;

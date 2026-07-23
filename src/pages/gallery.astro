@@ -41,7 +41,7 @@ import { DISTRIBUTION } from '../consts';
         image={terminalFastfetch}
         alt="Maximized terminal showing fastfetch output with the Amonite ASCII mark and system details"
         label="02"
-        caption={`fastfetch in the maximized terminal, reporting the system as shipped: ${DISTRIBUTION.name} ${DISTRIBUTION.release} (${DISTRIBUTION.series}) on Debian, XFCE, 817 packages.`}
+        caption={`fastfetch in the maximized terminal, reporting the system as shipped: ${DISTRIBUTION.name} ${DISTRIBUTION.release} (${DISTRIBUTION.series}) on ${DISTRIBUTION.platform}, ${DISTRIBUTION.desktop}.`}
       />
     </section>
 
@@ -77,9 +77,9 @@ import { DISTRIBUTION } from '../consts';
     <section>
       <Screenshot
         image={installerPartitions}
-        alt="Amonite installer (Calamares) at the partitioning step, offering erase disk, manual partitioning, and system encryption"
+        alt={`Amonite installer (${DISTRIBUTION.installer}) at the partitioning step, offering erase disk, manual partitioning, and system encryption`}
         label="05"
-        caption="The installer (Calamares) at the partitioning step. Erase disk or partition manually; encrypted installation is a checkbox, not a project."
+        caption={`The installer (${DISTRIBUTION.installer}) at the partitioning step. Erase disk or partition manually; encrypted installation is a checkbox, not a project.`}
         class="mx-auto max-w-3xl"
         sizes="(max-width: 1024px) 100vw, 48rem"
       />
@@ -133,7 +133,7 @@ import { DISTRIBUTION } from '../consts';
           </h2>
           <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate">
             These captures come from the validated QEMU/KVM configuration documented with the
-            release. The fastest way past screenshots is the live ISO itself.
+            release. Screenshots show the interface; the live ISO lets you use it.
           </p>
         </div>
         <div class="flex flex-wrap gap-3">

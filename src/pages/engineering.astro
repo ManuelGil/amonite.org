@@ -104,7 +104,7 @@ const composition = [
       <Screenshot
         image={terminalFastfetch}
         alt="Maximized terminal on Amonite running fastfetch, showing the Amonite ASCII mark and system details"
-        caption={`The command line as shipped: fastfetch reporting ${DISTRIBUTION.name} ${DISTRIBUTION.release} on Debian, XFCE, 817 packages. Unedited capture from the live ISO.`}
+        caption={`The command line as shipped: fastfetch reporting ${DISTRIBUTION.name} ${DISTRIBUTION.release} on ${DISTRIBUTION.platform}, ${DISTRIBUTION.desktop}. Unedited capture from the live ISO.`}
         sizes="(max-width: 1024px) 100vw, 36rem"
       />
       <div>
@@ -134,7 +134,7 @@ const composition = [
           Installation without ceremony
         </h2>
         <p class="mt-4 text-base leading-relaxed text-slate">
-          Calamares handles installation and disk setup, including encrypted layouts when
+          {DISTRIBUTION.installer} handles installation and disk setup, including encrypted layouts when
           required. The installer asks what it needs and nothing more.
         </p>
         <p class="mt-6">
@@ -149,7 +149,7 @@ const composition = [
       <div class="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
         <div>
           <h2 class="text-lg font-semibold tracking-tight text-graphite">
-            {DISTRIBUTION.series} · {DISTRIBUTION.stage}
+            {DISTRIBUTION.releaseLabel}
           </h2>
           <p class="mt-2 max-w-3xl text-sm leading-relaxed text-slate">
             The current release, verification steps, and installation guidance are on Downloads.

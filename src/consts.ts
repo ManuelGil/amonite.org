@@ -3,7 +3,7 @@
  */
 import { DISTRIBUTION } from './data/distribution';
 
-export const SITE_TITLE = 'Amonite';
+export const SITE_TITLE = DISTRIBUTION.name;
 export const SITE_AUTHOR = 'Manuel Gil';
 export const SITE_AUTHOR_URL = 'https://imgil.dev/';
 
@@ -23,7 +23,7 @@ export const SOFTWARE_APPLICATION_JSONLD = {
   applicationCategory: 'OperatingSystem',
   operatingSystem: 'Linux',
   softwareVersion: DISTRIBUTION.release,
-  datePublished: '2026-07-22',
+  datePublished: DISTRIBUTION.releaseDate,
   downloadUrl: DISTRIBUTION.isoUrl,
   releaseNotes: DISTRIBUTION.artifacts.releaseNotes.href,
   author: {

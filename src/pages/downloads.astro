@@ -5,6 +5,7 @@ import PageHeader from '../components/site/PageHeader.astro';
 import { DISTRIBUTION, SOFTWARE_APPLICATION_JSONLD } from '../consts';
 
 const { validatedConfiguration, releaseHistory } = DISTRIBUTION;
+const { releaseArtifact, artifacts } = DISTRIBUTION;
 
 const configuration = [
   { label: 'Architecture', value: validatedConfiguration.architecture },
@@ -16,16 +17,11 @@ const configuration = [
   { label: 'Installed system size', value: validatedConfiguration.installedSize },
 ];
 
-const iso = DISTRIBUTION.isoFileName;
-const verifyCommands = `# Compute the checksum of the downloaded image
-sha256sum ${iso}
-
-# Compare it with the published value
-cat ${iso}.sha256
-
-# Verify the detached GPG signatures
-gpg --verify ${iso}.asc ${iso}
-gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.release}.json`;
+const isoSize = new Intl.NumberFormat('en-US').format(releaseArtifact.sizeBytes);
+const releaseDate = new Intl.DateTimeFormat('en-US', {
+  dateStyle: 'long',
+  timeZone: 'UTC',
+}).format(new Date(`${DISTRIBUTION.releaseDate}T00:00:00Z`));
 ---
 
 <Layout
@@ -72,10 +68,32 @@ gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.rel
             <div>
               <dt class="text-sm text-slate">Release date</dt>
               <dd class="mt-1 font-mono text-sm font-medium text-graphite">
-                {DISTRIBUTION.releaseDate}
+                {releaseDate}
               </dd>
             </div>
           </dl>
+          <div class="mt-8 border-t border-border pt-6">
+            <div>
+              <p class="label-mono text-amber">Release image</p>
+              <a
+                href={DISTRIBUTION.isoUrl}
+                class="mt-2 block break-all font-mono text-sm text-graphite underline decoration-border underline-offset-4 hover:decoration-slate"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {DISTRIBUTION.isoFileName}
+              </a>
+              <p class="mt-2 text-sm text-slate">
+                {validatedConfiguration.architecture} · {isoSize} bytes
+              </p>
+              <p class="mt-3 text-xs leading-relaxed text-slate">
+                SHA-256
+                <code class="ml-1 break-all font-mono text-[0.7rem] text-graphite">
+                  {releaseArtifact.sha256}
+                </code>
+              </p>
+            </div>
+          </div>
         </div>
         <div class="flex flex-col items-stretch gap-3 lg:items-end lg:pb-1">
           <ActionLink href={DISTRIBUTION.isoUrl} external>
@@ -85,7 +103,7 @@ gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.rel
             Direct download · {DISTRIBUTION.isoFileName}
           </p>
           <ActionLink href={DISTRIBUTION.artifacts.releaseNotes.href} variant="ghost" external>
-            Release notes and verification files
+            Release notes on GitHub
           </ActionLink>
         </div>
       </div>
@@ -143,18 +161,16 @@ gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.rel
         Verification
       </h2>
       <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-        Every release includes a SHA256 checksum, detached GPG signatures, and signed
-        release metadata. Verify them before writing installation media, so the image is
-        complete and came from the project. The signing key is published with the release.
+        Official releases are signed so you can check that the image came from Amonite and was not
+        changed. The SHA-256 checksum provides an additional check before writing installation media.
       </p>
-      <pre
-        class="mt-8 overflow-x-auto border border-border bg-graphite p-6 font-mono text-[0.8125rem] leading-relaxed text-mist"><code>{verifyCommands}</code></pre>
-      <p class="mt-4 text-sm leading-relaxed text-slate">
-        All verification files are published alongside the ISO on the
-        <a
-          href={DISTRIBUTION.artifacts.iso.href}
-          class="text-graphite underline decoration-border underline-offset-[5px] hover:decoration-slate"
-        >current GitHub Release</a>.
+      <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate">
+        Releases can be checked independently. For the complete steps, read the <a
+          href={artifacts.verifyGuide.href}
+          class="text-graphite underline decoration-border underline-offset-4 hover:decoration-slate"
+          target="_blank"
+          rel="noopener noreferrer"
+        >official verification guide</a>.
       </p>
     </section>
 

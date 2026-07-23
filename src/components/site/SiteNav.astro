@@ -1,6 +1,6 @@
 ---
 import Logo from '../shared/Logo.astro';
-import { COMMUNITY_URL, SOURCE_URL } from '../../consts';
+import { COMMUNITY_URL, SITE_TITLE, SOURCE_URL } from '../../consts';
 
 const path = Astro.url.pathname;
 
@@ -19,9 +19,9 @@ function isActive(href: string) {
 
 <header class="sticky top-0 z-40 border-b border-border/80 bg-mist/95 backdrop-blur-sm">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3.5">
-    <a href="/" class="flex items-center gap-2 text-graphite" aria-label="Amonite home">
+    <a href="/" class="flex items-center gap-2 text-graphite" aria-label={`${SITE_TITLE} home`}>
       <Logo size="sm" />
-      <span class="text-sm font-semibold tracking-tight">Amonite</span>
+      <span class="text-sm font-semibold tracking-tight">{SITE_TITLE}</span>
     </a>
 
     <nav aria-label="Primary" class="hidden items-center gap-x-6 text-sm md:flex">
