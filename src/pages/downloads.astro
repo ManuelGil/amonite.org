@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import ActionLink from '../components/site/ActionLink.astro';
 import PageHeader from '../components/site/PageHeader.astro';
-import { DISTRIBUTION, SOFTWARE_APPLICATION_JSONLD } from '../consts';
+import { DISTRIBUTION, EDITIONS, RELEASE_EDITIONS, SOFTWARE_APPLICATION_JSONLD } from '../consts';
 
-const { validatedConfiguration, releaseHistory } = DISTRIBUTION;
+const { validatedConfiguration, releaseHistory, releaseNotes } = DISTRIBUTION;
+const { artifacts } = DISTRIBUTION;
 
 const configuration = [
   { label: 'Architecture', value: validatedConfiguration.architecture },
@@ -16,78 +17,334 @@ const configuration = [
   { label: 'Installed system size', value: validatedConfiguration.installedSize },
 ];
 
-const iso = DISTRIBUTION.isoFileName;
-const verifyCommands = `# Compute the checksum of the downloaded image
-sha256sum ${iso}
+const standardRelease = RELEASE_EDITIONS.find((edition) => edition.id === 'standard');
+const liteRelease = RELEASE_EDITIONS.find((edition) => edition.id === 'lite');
+const liteHistory = EDITIONS.lite.releaseHistory;
 
-# Compare it with the published value
-cat ${iso}.sha256
+const standardIsoSize =
+  DISTRIBUTION.releaseArtifact.sizeBytes !== null
+    ? new Intl.NumberFormat('en-US').format(DISTRIBUTION.releaseArtifact.sizeBytes)
+    : null;
 
-# Verify the detached GPG signatures
-gpg --verify ${iso}.asc ${iso}
-gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.release}.json`;
+/** Localized publication date from Publication.publishedAt (UTC calendar day). */
+function formatPublicationDate(isoDate: string): string {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${isoDate}T00:00:00Z`));
+}
 ---
 
 <Layout
   title="Downloads"
-  description={`Prepare to download, verify, and install Amonite ${DISTRIBUTION.series} ${DISTRIBUTION.stage}.`}
+  description={`Download and verify Amonite Standard ${DISTRIBUTION.release} and Amonite Lite 1.0.0-alpha.`}
   structuredData={[SOFTWARE_APPLICATION_JSONLD]}
 >
   <PageHeader
     eyebrow="Downloads"
-    title="Make Amonite your system."
-    lead={`Get ${DISTRIBUTION.name} ${DISTRIBUTION.series} ${DISTRIBUTION.stage} ready to install. Check your hardware, download the release, verify it, then install.`}
+    title="Current releases"
+    lead="Published release media and verification for Amonite editions. Edition purpose is described on the home page."
   />
 
   <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
-    <section class="border border-border bg-sand/15 p-8 sm:p-10">
-      <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
-        <div>
-          <p class="label-mono font-medium text-amber">Current release</p>
-          <h2 class="mt-3 text-2xl font-semibold tracking-tight text-graphite sm:text-3xl">
-            {DISTRIBUTION.releaseLabel}
-          </h2>
-          <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-            {`${DISTRIBUTION.releaseSummary} This is Alpha software.`}
-          </p>
-          <dl class="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-4">
+    {
+      standardRelease?.currentRelease && (
+        <section id="standard" class="border border-border bg-sand/15 p-8 sm:p-10">
+          <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
             <div>
-              <dt class="text-sm text-slate">Series</dt>
-              <dd class="mt-1 font-mono text-sm font-medium text-graphite">
-                {DISTRIBUTION.series}
-              </dd>
+              <p class="label-mono font-medium text-amber">
+                {standardRelease.name} · {standardRelease.statusLabel}
+              </p>
+              <h2 class="mt-3 text-2xl font-semibold tracking-tight text-graphite sm:text-3xl">
+                {standardRelease.currentRelease.title}
+              </h2>
+              <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+                {`${DISTRIBUTION.releaseSummary} This is Alpha software.`}
+              </p>
+              <dl class="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <dt class="text-sm text-slate">Edition</dt>
+                  <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                    {standardRelease.name}
+                  </dd>
+                </div>
+                <div>
+                  <dt class="text-sm text-slate">Series</dt>
+                  <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                    {DISTRIBUTION.series}
+                  </dd>
+                </div>
+                <div>
+                  <dt class="text-sm text-slate">Version</dt>
+                  <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                    {standardRelease.currentRelease.version}
+                  </dd>
+                </div>
+                {
+                  standardRelease.currentRelease.publishedAt && (
+                    <div>
+                      <dt class="text-sm text-slate">Published</dt>
+                      <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                        {formatPublicationDate(standardRelease.currentRelease.publishedAt)}
+                      </dd>
+                    </div>
+                  )
+                }
+              </dl>
+              <div class="mt-8 border-t border-border pt-6">
+                <p class="label-mono text-amber">Release image</p>
+                {
+                  standardRelease.currentRelease.isoUrl &&
+                    standardRelease.currentRelease.isoFileName && (
+                      <a
+                        href={standardRelease.currentRelease.isoUrl}
+                        class="mt-2 block break-all font-mono text-sm text-graphite underline decoration-border underline-offset-4 hover:decoration-slate"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {standardRelease.currentRelease.isoFileName}
+                      </a>
+                    )
+                }
+                <p class="mt-2 text-sm text-slate">
+                  {validatedConfiguration.architecture}
+                  {standardIsoSize ? ` · ${standardIsoSize} bytes` : ''}
+                </p>
+                {
+                  standardRelease.currentRelease.sha256 ? (
+                    <p class="mt-3 text-xs leading-relaxed text-slate">
+                      SHA-256
+                      <code class="ml-1 break-all font-mono text-[0.7rem] text-graphite">
+                        {standardRelease.currentRelease.sha256}
+                      </code>
+                    </p>
+                  ) : (
+                    <p class="mt-3 text-xs leading-relaxed text-slate">
+                      SHA-256 not yet available.
+                    </p>
+                  )
+                }
+              </div>
             </div>
+            <div class="flex flex-col items-stretch gap-3 lg:items-end lg:pb-1">
+              {
+                standardRelease.currentRelease.isoUrl &&
+                  standardRelease.currentRelease.isoFileName && (
+                    <>
+                      <ActionLink href={standardRelease.currentRelease.isoUrl} external>
+                        Download ISO
+                      </ActionLink>
+                      <p class="font-mono text-center text-xs text-slate lg:text-right">
+                        Direct download · {standardRelease.currentRelease.isoFileName}
+                      </p>
+                    </>
+                  )
+              }
+              <ActionLink
+                href={standardRelease.currentRelease.verifyGuideHref}
+                variant="ghost"
+                external
+              >
+                Verification guide
+              </ActionLink>
+              {
+                standardRelease.currentRelease.releasePageHref && (
+                  <ActionLink
+                    href={standardRelease.currentRelease.releasePageHref}
+                    variant="ghost"
+                    external
+                  >
+                    Release notes on GitHub
+                  </ActionLink>
+                )
+              }
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      liteRelease?.currentRelease && (
+        <section id="lite" class="border border-border bg-sand/15 p-8 sm:p-10">
+          <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
             <div>
-              <dt class="text-sm text-slate">Stage</dt>
-              <dd class="mt-1 font-mono text-sm font-medium text-graphite">
-                {DISTRIBUTION.stage}
-              </dd>
+              <p class="label-mono font-medium text-amber">
+                {liteRelease.name} · {liteRelease.statusLabel}
+              </p>
+              <h2 class="mt-3 text-2xl font-semibold tracking-tight text-graphite sm:text-3xl">
+                {liteRelease.currentRelease.title}
+              </h2>
+              <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+                {`${liteRelease.currentRelease.summary} This is Alpha software.`}
+              </p>
+              {
+                liteRelease.currentRelease.direction && (
+                  <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate">
+                    {liteRelease.currentRelease.direction}
+                  </p>
+                )
+              }
+              <dl class="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <dt class="text-sm text-slate">Edition</dt>
+                  <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                    {liteRelease.name}
+                  </dd>
+                </div>
+                <div>
+                  <dt class="text-sm text-slate">Series</dt>
+                  <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                    {liteRelease.currentRelease.series}
+                  </dd>
+                </div>
+                <div>
+                  <dt class="text-sm text-slate">Version</dt>
+                  <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                    {liteRelease.currentRelease.version}
+                  </dd>
+                </div>
+                {
+                  liteRelease.currentRelease.publishedAt && (
+                    <div>
+                      <dt class="text-sm text-slate">Published</dt>
+                      <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                        {formatPublicationDate(liteRelease.currentRelease.publishedAt)}
+                      </dd>
+                    </div>
+                  )
+                }
+              </dl>
+              <p class="mt-3 break-all font-mono text-xs text-slate">
+                Tag · {liteRelease.currentRelease.tag}
+              </p>
+              <div class="mt-8 border-t border-border pt-6">
+                <p class="label-mono text-amber">Release image</p>
+                {
+                  liteRelease.currentRelease.isoUrl && liteRelease.currentRelease.isoFileName ? (
+                    <a
+                      href={liteRelease.currentRelease.isoUrl}
+                      class="mt-2 block break-all font-mono text-sm text-graphite underline decoration-border underline-offset-4 hover:decoration-slate"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {liteRelease.currentRelease.isoFileName}
+                    </a>
+                  ) : (
+                    <p class="mt-2 text-sm text-slate">ISO not yet available.</p>
+                  )
+                }
+                {
+                  liteRelease.currentRelease.sha256 ? (
+                    <p class="mt-3 text-xs leading-relaxed text-slate">
+                      SHA-256
+                      <code class="ml-1 break-all font-mono text-[0.7rem] text-graphite">
+                        {liteRelease.currentRelease.sha256}
+                      </code>
+                    </p>
+                  ) : (
+                    <p class="mt-3 text-xs leading-relaxed text-slate">
+                      SHA-256 not yet available.
+                    </p>
+                  )
+                }
+              </div>
+              <ul class="mt-8 space-y-2 border-t border-border pt-6 text-sm leading-relaxed text-slate">
+                {
+                  liteRelease.currentRelease.highlights.map((item) => (
+                    <li class="flex gap-2">
+                      <span class="font-mono text-amber" aria-hidden="true">
+                        ·
+                      </span>
+                      {item}
+                    </li>
+                  ))
+                }
+              </ul>
+              <p class="mt-6 text-sm leading-relaxed text-slate">
+                {liteRelease.currentRelease.evaluationNotice}
+              </p>
             </div>
-            <div>
-              <dt class="text-sm text-slate">Version</dt>
-              <dd class="mt-1 font-mono text-sm font-medium text-graphite">
-                {DISTRIBUTION.release}
-              </dd>
+            <div class="flex flex-col items-stretch gap-3 lg:items-end lg:pb-1">
+              {
+                liteRelease.currentRelease.isoUrl && liteRelease.currentRelease.isoFileName && (
+                  <>
+                    <ActionLink href={liteRelease.currentRelease.isoUrl} external>
+                      Download ISO
+                    </ActionLink>
+                    <p class="font-mono text-center text-xs text-slate lg:text-right">
+                      Direct download · {liteRelease.currentRelease.isoFileName}
+                    </p>
+                  </>
+                )
+              }
+              <ActionLink
+                href={liteRelease.currentRelease.verifyGuideHref}
+                variant="ghost"
+                external
+              >
+                Verification guide
+              </ActionLink>
+              {
+                liteRelease.currentRelease.releasePageHref && (
+                  <ActionLink
+                    href={liteRelease.currentRelease.releasePageHref}
+                    variant="ghost"
+                    external
+                  >
+                    Release notes on GitHub
+                  </ActionLink>
+                )
+              }
             </div>
-            <div>
-              <dt class="text-sm text-slate">Release date</dt>
-              <dd class="mt-1 font-mono text-sm font-medium text-graphite">
-                {DISTRIBUTION.releaseDate}
-              </dd>
-            </div>
-          </dl>
-        </div>
-        <div class="flex flex-col items-stretch gap-3 lg:items-end lg:pb-1">
-          <ActionLink href={DISTRIBUTION.isoUrl} external>
-            Download ISO
-          </ActionLink>
-          <p class="font-mono text-center text-xs text-slate lg:text-right">
-            Direct download · {DISTRIBUTION.isoFileName}
-          </p>
-          <ActionLink href={DISTRIBUTION.artifacts.releaseNotes.href} variant="ghost" external>
-            Release notes and verification files
-          </ActionLink>
-        </div>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+          Standard highlights
+        </h2>
+        <ul class="mt-6 space-y-2 border-t border-border pt-6 text-sm leading-relaxed text-slate">
+          {
+            releaseNotes.highlights.map((item) => (
+              <li class="flex gap-2">
+                <span class="font-mono text-amber" aria-hidden="true">
+                  ·
+                </span>
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+          Standard What's New
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-slate">
+          {releaseNotes.whatsNew.intro}
+        </p>
+        <ul class="mt-6 space-y-2 text-sm leading-relaxed text-slate">
+          {
+            releaseNotes.whatsNew.improvements.map((item) => (
+              <li class="flex gap-2">
+                <span class="font-mono text-amber" aria-hidden="true">
+                  ·
+                </span>
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-6 text-sm leading-relaxed text-slate">
+          {releaseNotes.whatsNew.closing}
+        </p>
+        <p class="mt-6 text-sm leading-relaxed text-slate">{releaseNotes.notes}</p>
       </div>
     </section>
 
@@ -97,7 +354,7 @@ gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.rel
           Validated configuration
         </h2>
         <p class="mt-3 text-base leading-relaxed text-slate">
-          {`The configuration used to validate the current ${DISTRIBUTION.series} ${DISTRIBUTION.stage} release. A practical reference, not a statement of minimum or recommended requirements.`}
+          {`The configuration used to validate the current ${DISTRIBUTION.editionName} ${DISTRIBUTION.series} ${DISTRIBUTION.stage} release. A practical reference, not a statement of minimum or recommended requirements.`}
         </p>
         <table class="mt-8 w-full border-t border-border text-sm">
           <caption class="sr-only">Validated hardware configuration</caption>
@@ -143,18 +400,17 @@ gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.rel
         Verification
       </h2>
       <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-        Every release includes a SHA256 checksum, detached GPG signatures, and signed
-        release metadata. Verify them before writing installation media, so the image is
-        complete and came from the project. The signing key is published with the release.
+        Official releases are signed so you can check that the image came from Amonite and was not
+        changed. When a SHA-256 checksum is listed with a release, it provides an additional check
+        before writing installation media.
       </p>
-      <pre
-        class="mt-8 overflow-x-auto border border-border bg-graphite p-6 font-mono text-[0.8125rem] leading-relaxed text-mist"><code>{verifyCommands}</code></pre>
-      <p class="mt-4 text-sm leading-relaxed text-slate">
-        All verification files are published alongside the ISO on the
-        <a
-          href={DISTRIBUTION.artifacts.iso.href}
-          class="text-graphite underline decoration-border underline-offset-[5px] hover:decoration-slate"
-        >current GitHub Release</a>.
+      <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate">
+        Releases can be checked independently. For the complete steps, read the <a
+          href={artifacts.verifyGuide.href}
+          class="text-graphite underline decoration-border underline-offset-4 hover:decoration-slate"
+          target="_blank"
+          rel="noopener noreferrer"
+        >official verification guide</a>.
       </p>
     </section>
 
@@ -192,28 +448,71 @@ gpg --verify amonite-${DISTRIBUTION.release}.json.asc amonite-${DISTRIBUTION.rel
 
     <section>
       <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        Release history
+        Standard release history
       </h2>
       <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-        Previous releases remain available through GitHub. The list will grow as releases
-        are published.
+        Release history is edition-specific. This list covers Standard only.
       </p>
       <ul class="mt-8 divide-y divide-border border-y border-border">
         {
           releaseHistory.map((release) => (
             <li class="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
-              <div class="flex items-baseline gap-4">
+              <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
                 <p class="font-medium text-graphite">{release.label}</p>
                 <p class="font-mono text-sm text-slate">{release.version}</p>
+                {
+                  release.publishedAt && (
+                    <p class="font-mono text-sm text-slate">
+                      {formatPublicationDate(release.publishedAt)}
+                    </p>
+                  )
+                }
               </div>
               {
-                release.version === DISTRIBUTION.release ? (
+                release.isCurrent ? (
                   <p class="label-mono text-amber">Current release</p>
-                ) : (
+                ) : release.href ? (
                   <ActionLink href={release.href} variant="ghost" external>
                     Open release
                   </ActionLink>
-                )
+                ) : null
+              }
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
+        Lite release history
+      </h2>
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
+        Release history is edition-specific. This list covers Lite only.
+      </p>
+      <ul class="mt-8 divide-y divide-border border-y border-border">
+        {
+          liteHistory.map((release) => (
+            <li class="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
+              <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+                <p class="font-medium text-graphite">{release.label}</p>
+                <p class="font-mono text-sm text-slate">{release.version}</p>
+                {
+                  release.publishedAt && (
+                    <p class="font-mono text-sm text-slate">
+                      {formatPublicationDate(release.publishedAt)}
+                    </p>
+                  )
+                }
+              </div>
+              {
+                release.isCurrent ? (
+                  <p class="label-mono text-amber">Current release</p>
+                ) : release.href ? (
+                  <ActionLink href={release.href} variant="ghost" external>
+                    Open release
+                  </ActionLink>
+                ) : null
               }
             </li>
           ))

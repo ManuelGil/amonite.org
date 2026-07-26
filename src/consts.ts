@@ -1,9 +1,19 @@
 /**
  * Website metadata. Distribution facts: ./data/distribution.ts
  */
-import { DISTRIBUTION } from './data/distribution';
+import {
+  artifactsReady,
+  DISTRIBUTION,
+  EDITIONS,
+  PRODUCT,
+  PUBLIC_EDITIONS,
+  RELEASE_EDITIONS,
+  SERIES,
+  CURRENT_SERIES,
+  isoEvidenceReady,
+} from './data/distribution';
 
-export const SITE_TITLE = 'Amonite';
+export const SITE_TITLE = DISTRIBUTION.name;
 export const SITE_AUTHOR = 'Manuel Gil';
 export const SITE_AUTHOR_URL = 'https://imgil.dev/';
 
@@ -23,9 +33,11 @@ export const SOFTWARE_APPLICATION_JSONLD = {
   applicationCategory: 'OperatingSystem',
   operatingSystem: 'Linux',
   softwareVersion: DISTRIBUTION.release,
-  datePublished: '2026-07-22',
-  downloadUrl: DISTRIBUTION.isoUrl,
-  releaseNotes: DISTRIBUTION.artifacts.releaseNotes.href,
+  ...(DISTRIBUTION.releaseDate ? { datePublished: DISTRIBUTION.releaseDate } : {}),
+  ...(DISTRIBUTION.isoUrl ? { downloadUrl: DISTRIBUTION.isoUrl } : {}),
+  ...(DISTRIBUTION.artifacts.releaseNotes.href
+    ? { releaseNotes: DISTRIBUTION.artifacts.releaseNotes.href }
+    : {}),
   author: {
     '@type': 'Person',
     name: SITE_AUTHOR,
@@ -34,4 +46,14 @@ export const SOFTWARE_APPLICATION_JSONLD = {
   sameAs: [DISTRIBUTION.sourceUrl, DISTRIBUTION.communityUrl],
 } as const;
 
-export { DISTRIBUTION };
+export {
+  PRODUCT,
+  SERIES,
+  CURRENT_SERIES,
+  EDITIONS,
+  PUBLIC_EDITIONS,
+  RELEASE_EDITIONS,
+  DISTRIBUTION,
+  artifactsReady,
+  isoEvidenceReady,
+};
