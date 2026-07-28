@@ -1,6 +1,6 @@
 # Amonite
 
-> Amonite is a GNU/Linux operating system engineered for what you do after install: desktop work, development, administration, and local AI. Official editions: Lite (published, lite/v1.0.0-alpha), Standard (published, 1.0.0-alpha.2).
+> Amonite is a GNU/Linux operating system engineered for what you do after install: desktop work, development, administration, and local AI. Its two public editions are Standard, the default complete desktop, and Lite, a minimal desktop assembled from independent components. Current releases: Lite (lite/v1.0.0-alpha) and Standard (v1.0.0-alpha.2).
 
 Amonite is an independent distribution maintained by Manuel Gil. Every package ships because it delivers a meaningful capability, never because another package happened to recommend it. Defaults (XFCE desktop, Kitty terminal, Debian Stable base, Calamares installer) stay replaceable. Public discussion happens on Reddit; releases and documentation are published on GitHub. There is no roadmap, newsletter, or support inbox on this site.
 
@@ -15,7 +15,7 @@ Amonite is an independent distribution maintained by Manuel Gil. Every package s
 
 ## Facts
 
-- Series: Nautilus (Version 1). Editions: Lite, Standard. Current downloadable releases: Standard 1.0.0-alpha.2; Lite 1.0.0-alpha (lite/v1.0.0-alpha).
+- Series: Nautilus (Version 1). Public editions: Lite, Standard. Current releases: Standard 1.0.0-alpha.2; Lite 1.0.0-alpha (lite/v1.0.0-alpha).
 - Base platform: Debian Stable. Default desktop: XFCE. Default terminal: Kitty. Installer: Calamares.
 - Capabilities: desktop computing, software development, system administration, local artificial intelligence (offline inference over GGUF models via llama.cpp with an OpenAI-compatible API), networking, security (AppArmor, optional encrypted installs), storage, documentation.
 - Source and releases: https://github.com/ManuelGil/amonite

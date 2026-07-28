@@ -57,7 +57,7 @@ function releaseAssetUrl(tag: string, filename: string): string {
 }
 
 function releasePageUrl(tag: string): string {
-  return `${SOURCE_URL}/releases/tag/${tag}`;
+  return `${SOURCE_URL}/releases/tag/${encodeURIComponent(tag)}`;
 }
 
 /**
@@ -124,7 +124,7 @@ export const PRODUCT = {
 export const SERIES = {
   nautilus: {
     id: 'nautilus',
-    majorVersion: '1.x',
+    majorVersion: '1',
     codename: 'Nautilus',
   },
 } as const;
@@ -155,36 +155,33 @@ const standardAlpha2 = {
     'This release is intended for evaluation and testing. It may contain bugs, incomplete features or compatibility issues and is not intended for production use.',
   notes: {
     highlights: [
-      'Refined desktop experience',
-      'Improved desktop integration',
-      'Enhanced file management',
+      'Debian 13 (Trixie)',
+      'Complete XFCE desktop integration',
       'Welcome application',
+      'Kitty terminal',
       'Curated command-line environment',
-      'Local AI inference support',
+      'Local AI inference with llama.cpp',
       'Calamares installer',
     ] as const,
     whatsNew: {
       intro:
-        "This release focuses on refining the default desktop experience while preserving Amonite's lightweight and loosely coupled architecture.",
+        "This release focuses on refining the default desktop experience while preserving Amonite's lightweight and maintainable composition.",
       improvements: [
         'a complete and consistent default desktop appearance',
-        'automatic creation of standard user directories',
-        'integrated archive management in the file manager',
-        'thumbnail generation for supported file types',
-        'the default Amonite wallpaper applied for new users',
+        'the intended desktop integration for this stage of development',
       ] as const,
       closing:
-        'These enhancements are achieved through carefully selected runtime packages and declarative configuration, without introducing additional services, hooks or custom installation logic.',
+        'These changes refine the desktop experience without changing the product’s lightweight composition.',
     },
   },
   publication: {
-    publishedAt: '2026-07-26',
+    publishedAt: '2026-07-28',
   },
   artifacts: {
     iso: publishedIsoArtifact({
       version: '1.0.0-alpha.2',
       tag: 'v1.0.0-alpha.2',
-      sha256: '8b23b4dc3a249cfaf31ea19328a3a83111e06f5d15dda1723afebb2c994361eb',
+      sha256: '9511d94b8f35735d2c94d74f8027a26ce9f61b1057637be1d34547575fda19a9',
     }),
   },
   releasePage: {
@@ -241,7 +238,7 @@ const liteAlpha1 = {
   tag: LITE_RELEASE_TAG,
   seriesId: CURRENT_SERIES.id,
   title: 'Amonite Lite 1.0.0 Alpha',
-  label: 'Lite · Alpha',
+  label: seriesStageLabel(STAGE_ALPHA),
   stage: STAGE_ALPHA,
   summary: 'The first public alpha release of Amonite Lite.',
   supportStatus: 'evaluation' as const,
@@ -249,18 +246,19 @@ const liteAlpha1 = {
     'This release is intended for evaluation and testing. It may contain bugs, incomplete features or compatibility issues and should not yet be considered production-ready.',
   notes: {
     highlights: [
-      'Debian-based GNU/Linux system',
-      'Lightweight Wayland desktop powered by Labwc',
-      'Kitty as the default terminal',
+      'Debian 13 (Trixie)',
+      'Wayland desktop with Labwc',
+      'UWSM session management',
+      'LightDM login manager',
+      'Kitty terminal',
       'Curated command-line environment',
       'Local AI inference with llama.cpp',
       'Welcome application',
       'Calamares installer',
-      'Carefully selected runtime components',
-      'Minimal desktop with low coupling and easy customization',
+      'Independent components with low coupling',
     ] as const,
     direction:
-      'This release represents the current direction of Amonite. The desktop is built from independent components instead of relying on a traditional desktop environment, allowing users to replace or customize individual parts without affecting the rest of the system.',
+      'This release is a minimal desktop assembled from independent upstream components using standard Debian integration mechanisms. It emphasizes simplicity, efficiency, security, privacy, maintainability, low coupling, and modularity.',
     whatsNew: {
       intro: '',
       improvements: [] as const,
@@ -268,14 +266,14 @@ const liteAlpha1 = {
     },
   },
   publication: {
-    publishedAt: '2026-07-26',
+    publishedAt: '2026-07-28',
   },
   artifacts: {
     iso: publishedIsoArtifact({
       version: '1.0.0-alpha',
       tag: LITE_RELEASE_TAG,
       editionSlug: 'lite',
-      sha256: null,
+      sha256: 'a0b9f7334aae474ac53cc2fb255975cb67c8727c5f409762a3a9ab3702a95691',
     }),
   },
   releasePage: {
@@ -304,7 +302,7 @@ export const EDITIONS = {
     statusDetail: 'Official edition with a published alpha release.',
     audience: 'Users who want a minimal desktop assembled from independent components.',
     difference:
-      'A lightweight Wayland desktop based on Labwc, with replaceable parts and low coupling between components.',
+      'A minimal desktop assembled from independent upstream components using standard Debian integration mechanisms, with low coupling and modularity.',
     role: null,
     isDefault: false,
     isPublic: true,
@@ -341,8 +339,9 @@ export const EDITIONS = {
     statusLabel: 'Published',
     statusDetail: 'Official edition with a published alpha release.',
     audience:
-      'Users who need a complete day-one system for desktop work, development, administration, and local AI.',
-    difference: null,
+      'The default edition for users who need a complete desktop experience for desktop work, development, administration, and local AI.',
+    difference:
+      'A curated Debian desktop with complete XFCE integration, while remaining lightweight and maintainable.',
     role: null,
     isDefault: true,
     isPublic: true,
