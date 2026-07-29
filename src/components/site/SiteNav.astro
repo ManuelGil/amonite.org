@@ -1,6 +1,6 @@
 ---
 import Logo from '../shared/Logo.astro';
-import { COMMUNITY_URL, SOURCE_URL } from '../../consts';
+import { COMMUNITY_URL, DOWNLOAD_URL } from '../../consts';
 
 const path = Astro.url.pathname;
 
@@ -42,8 +42,8 @@ function isActive(href: string) {
     </nav>
 
     <div class="flex items-center gap-3 text-sm">
-      <a href={SOURCE_URL} class="hidden font-medium text-slate hover:text-graphite sm:inline">
-        GitHub
+      <a href={DOWNLOAD_URL} class="hidden font-medium text-slate hover:text-graphite sm:inline">
+        Releases
       </a>
       <a
         href="/downloads"
@@ -69,6 +69,6 @@ function isActive(href: string) {
         </a>
       ))
     }
-    <a href={COMMUNITY_URL} class="shrink-0 font-medium text-slate">Reddit</a>
+    <a href={COMMUNITY_URL} class="shrink-0 font-medium text-slate">r/Amonite</a>
   </nav>
 </header>

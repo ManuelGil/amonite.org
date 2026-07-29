@@ -43,7 +43,7 @@ export const SOFTWARE_APPLICATION_JSONLD = {
     name: SITE_AUTHOR,
     url: SITE_AUTHOR_URL,
   },
-  sameAs: [DISTRIBUTION.sourceUrl, DISTRIBUTION.communityUrl],
+  sameAs: [DISTRIBUTION.downloadUrl, DISTRIBUTION.communityUrl],
 } as const;
 
 export {

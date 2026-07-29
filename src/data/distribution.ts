@@ -25,10 +25,10 @@
  * Never invent checksums, sizes, filenames, or download URLs.
  */
 
-const SOURCE_URL = 'https://github.com/ManuelGil/amonite' as const;
-const RELEASES_URL = `${SOURCE_URL}/releases` as const;
+const DOWNLOAD_URL = 'https://github.com/ManuelGil/amonite' as const;
+const RELEASES_URL = `${DOWNLOAD_URL}/releases` as const;
 const ARCHITECTURE = 'amd64' as const;
-const VERIFY_GUIDE_HREF = `${SOURCE_URL}/blob/main/VERIFY.md` as const;
+const VERIFY_GUIDE_HREF = `${DOWNLOAD_URL}/blob/main/VERIFY.md` as const;
 
 const PLATFORM = 'Debian Stable' as const;
 const DESKTOP = 'XFCE' as const;
@@ -53,11 +53,11 @@ type IsoArtifact = {
 };
 
 function releaseAssetUrl(tag: string, filename: string): string {
-  return `${SOURCE_URL}/releases/download/${encodeURIComponent(tag)}/${filename}`;
+  return `${DOWNLOAD_URL}/releases/download/${encodeURIComponent(tag)}/${filename}`;
 }
 
 function releasePageUrl(tag: string): string {
-  return `${SOURCE_URL}/releases/tag/${encodeURIComponent(tag)}`;
+  return `${DOWNLOAD_URL}/releases/tag/${encodeURIComponent(tag)}`;
 }
 
 /**
@@ -99,7 +99,7 @@ function isPublishedRelease(release: {
 /** Product-level facts shared by every edition. */
 export const PRODUCT = {
   name: 'Amonite',
-  sourceUrl: SOURCE_URL,
+  sourceUrl: DOWNLOAD_URL,
   communityUrl: 'https://www.reddit.com/r/amonite/',
   downloadUrl: RELEASES_URL,
   sponsorsUrl: 'https://github.com/sponsors/ManuelGil',
@@ -112,7 +112,7 @@ export const PRODUCT = {
       href: VERIFY_GUIDE_HREF,
     },
     installGuide: {
-      href: `${SOURCE_URL}/blob/main/INSTALL.md`,
+      href: `${DOWNLOAD_URL}/blob/main/INSTALL.md`,
     },
   },
 } as const;
