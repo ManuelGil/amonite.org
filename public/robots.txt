@@ -1,4 +1,55 @@
+# Amonite — https://amonite.org
+# Everything on this site is public. Nothing here is disallowed.
+# The named groups below only state that intent explicitly; they grant no
+# access that "User-agent: *" did not already grant.
+
 User-agent: *
 Allow: /
+
+# Search and answer engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# AI assistants and AI search
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Structured summary for language models: https://amonite.org/llms.txt
 
 Sitemap: https://amonite.org/sitemap-index.xml

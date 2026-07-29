@@ -8,11 +8,22 @@ interface Props {
   title: string;
   description: string;
   image?: ImageMetadata | string;
+  /** Describes the share image for screen readers and AI extraction. */
+  imageAlt?: string;
 }
+
+/** Matches FallbackImage. Pages that pass their own image should pass their own alt. */
+const FALLBACK_IMAGE_ALT =
+  'Amonite live session at first boot, with the Welcome handbook and the installer open on an otherwise empty desktop';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage } = Astro.props;
+const {
+  title,
+  description,
+  image = FallbackImage,
+  imageAlt = FALLBACK_IMAGE_ALT,
+} = Astro.props;
 
 const ogImage =
   typeof image === 'string'
@@ -33,9 +44,15 @@ const imageURL = new URL(ogImage.src, Astro.site);
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="generator" content={Astro.generator} />
 <meta name="author" content={SITE_AUTHOR} />
+<meta name="color-scheme" content="light" />
 <link rel="canonical" href={canonicalURL} />
+<meta
+  name="robots"
+  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+/>
 
 <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/inter-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 
 <title>{title}</title>
@@ -46,6 +63,7 @@ const imageURL = new URL(ogImage.src, Astro.site);
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={imageURL} />
+<meta property="og:image:alt" content={imageAlt} />
 {ogImage.width && <meta property="og:image:width" content={String(ogImage.width)} />}
 {ogImage.height && <meta property="og:image:height" content={String(ogImage.height)} />}
 <meta property="og:site_name" content={SITE_TITLE} />
@@ -55,3 +73,4 @@ const imageURL = new URL(ogImage.src, Astro.site);
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={imageURL} />
+<meta name="twitter:image:alt" content={imageAlt} />

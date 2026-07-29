@@ -19,6 +19,7 @@ import {
   title="Amonite"
   description={SITE_DESCRIPTION}
   image={terminalFastfetch}
+  imageAlt="Maximized terminal on Amonite showing fastfetch output with the Amonite ASCII mark and system details"
   structuredData={[SOFTWARE_APPLICATION_JSONLD]}
 >
   <section class="border-b border-border bg-graphite text-mist">
@@ -59,6 +60,7 @@ import {
         alt="Maximized terminal on Amonite showing fastfetch output with the Amonite ASCII mark and system details"
         caption={`The terminal after boot: fastfetch reporting ${DISTRIBUTION.name} ${DISTRIBUTION.release} as shipped. Unedited capture from the live ISO.`}
         loading="eager"
+        fetchpriority="high"
         sizes="(max-width: 1024px) 100vw, 40rem"
         captionClass="text-mist/50"
       />
