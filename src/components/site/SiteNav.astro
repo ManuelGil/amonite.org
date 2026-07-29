@@ -1,6 +1,6 @@
 ---
 import Logo from '../shared/Logo.astro';
-import { COMMUNITY_URL, SITE_TITLE, SOURCE_URL } from '../../consts';
+import { COMMUNITY_URL, DOWNLOAD_URL } from '../../consts';
 
 const path = Astro.url.pathname;
 
@@ -19,9 +19,9 @@ function isActive(href: string) {
 
 <header class="sticky top-0 z-40 border-b border-border/80 bg-mist/95 backdrop-blur-sm">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3.5">
-    <a href="/" class="flex items-center gap-2 text-graphite" aria-label={`${SITE_TITLE} home`}>
+    <a href="/" class="flex items-center gap-2 text-graphite" aria-label="Amonite home">
       <Logo size="sm" />
-      <span class="text-sm font-semibold tracking-tight">{SITE_TITLE}</span>
+      <span class="text-sm font-semibold tracking-tight">Amonite</span>
     </a>
 
     <nav aria-label="Primary" class="hidden items-center gap-x-6 text-sm md:flex">
@@ -42,8 +42,8 @@ function isActive(href: string) {
     </nav>
 
     <div class="flex items-center gap-3 text-sm">
-      <a href={SOURCE_URL} class="hidden font-medium text-slate hover:text-graphite sm:inline">
-        GitHub
+      <a href={DOWNLOAD_URL} class="hidden font-medium text-slate hover:text-graphite sm:inline">
+        Releases
       </a>
       <a
         href="/downloads"
@@ -69,6 +69,6 @@ function isActive(href: string) {
         </a>
       ))
     }
-    <a href={COMMUNITY_URL} class="shrink-0 font-medium text-slate">Reddit</a>
+    <a href={COMMUNITY_URL} class="shrink-0 font-medium text-slate">r/Amonite</a>
   </nav>
 </header>

@@ -7,26 +7,26 @@ import ProjectSupport from '../components/site/ProjectSupport.astro';
 import {
   COMMUNITY_URL,
   DISTRIBUTION,
-  SOURCE_URL,
+  DOWNLOAD_URL,
 } from '../consts';
 import workspaceImage from '../assets/img/workspace.jpg';
 
 const channels = [
   {
-    name: 'Reddit',
+    name: 'r/Amonite',
     role: 'Questions, feedback, and discussion',
-    detail: `r/amonite is the primary public space for conversation about running ${DISTRIBUTION.series} ${DISTRIBUTION.stage}: installs, what works, and where friction remains.`,
+    detail: `r/Amonite is the primary public space for conversation about running ${DISTRIBUTION.series} ${DISTRIBUTION.stage}: installs, what works, and where friction remains.`,
     href: COMMUNITY_URL,
-    linkLabel: 'Open r/amonite',
+    linkLabel: 'Open r/Amonite',
     external: true,
   },
   {
-    name: 'GitHub',
-    role: 'Releases and project documentation',
+    name: 'GitHub Releases',
+    role: 'Official distribution channel',
     detail:
-      'Releases, checksums, signatures, and public documentation for the current stage are published on GitHub.',
-    href: SOURCE_URL,
-    linkLabel: 'Open GitHub',
+      'Official releases, checksums, signatures, and release notes are published through GitHub Releases.',
+    href: DOWNLOAD_URL,
+    linkLabel: 'Open GitHub Releases',
     external: true,
   },
   {
@@ -42,12 +42,12 @@ const channels = [
 
 <Layout
   title="Community"
-  description="Discuss Amonite on r/amonite. Follow releases and project documentation on GitHub."
+  description="Discuss Amonite on r/Amonite. Download official releases from GitHub Releases."
 >
   <PageHeader
     eyebrow="Community"
     title="Public discussion is the support channel"
-    lead="Questions and feedback belong on Reddit, where the conversation stays public and useful to others. Releases and project documentation are published on GitHub."
+    lead="Questions, feedback, and discussion belong on r/Amonite. Official releases are published through GitHub Releases. The source repository is temporarily private during this stage of development."
   />
 
   <article class="mx-auto max-w-6xl px-6 py-16 sm:py-20">

@@ -16,13 +16,13 @@ import { DISTRIBUTION } from '../consts';
 
 <Layout
   title="Gallery"
-  description={`What ${DISTRIBUTION.name} ${DISTRIBUTION.series} ${DISTRIBUTION.stage} looks like as shipped: first boot, terminal, welcome handbook, installer, and everyday tools.`}
+  description={`What the ${DISTRIBUTION.name} Standard ${DISTRIBUTION.series} ${DISTRIBUTION.stage} release looks like as shipped: first boot, terminal, welcome handbook, installer, and everyday tools.`}
   image={firstBoot}
 >
   <PageHeader
     eyebrow="Gallery"
     title="The system as shipped"
-    lead={`Captures of ${DISTRIBUTION.name} ${DISTRIBUTION.release} running from the live ISO. Window images are cropped to the window. Nothing is staged or retouched.`}
+    lead={`Captures of ${DISTRIBUTION.name} Standard ${DISTRIBUTION.release} running from the live ISO. Window images are cropped to the window. Nothing is staged or retouched.`}
   />
 
   <article class="mx-auto max-w-5xl space-y-16 px-6 py-16 sm:space-y-20 sm:py-20">
@@ -41,7 +41,7 @@ import { DISTRIBUTION } from '../consts';
         image={terminalFastfetch}
         alt="Maximized terminal showing fastfetch output with the Amonite ASCII mark and system details"
         label="02"
-        caption={`fastfetch in the maximized terminal, reporting the system as shipped: ${DISTRIBUTION.name} ${DISTRIBUTION.release} (${DISTRIBUTION.series}) on ${DISTRIBUTION.platform}, ${DISTRIBUTION.desktop}.`}
+        caption={`fastfetch in the maximized terminal, reporting the Standard edition as shipped: ${DISTRIBUTION.name} ${DISTRIBUTION.release} (${DISTRIBUTION.series}) on Debian with XFCE, 817 packages.`}
       />
     </section>
 
@@ -77,9 +77,9 @@ import { DISTRIBUTION } from '../consts';
     <section>
       <Screenshot
         image={installerPartitions}
-        alt={`Amonite installer (${DISTRIBUTION.installer}) at the partitioning step, offering erase disk, manual partitioning, and system encryption`}
+        alt="Amonite installer (Calamares) at the partitioning step, offering erase disk, manual partitioning, and system encryption"
         label="05"
-        caption={`The installer (${DISTRIBUTION.installer}) at the partitioning step. Erase disk or partition manually; encrypted installation is a checkbox, not a project.`}
+        caption="The installer (Calamares) at the partitioning step. Erase disk or partition manually; encrypted installation is a checkbox, not a project."
         class="mx-auto max-w-3xl"
         sizes="(max-width: 1024px) 100vw, 48rem"
       />
@@ -133,7 +133,7 @@ import { DISTRIBUTION } from '../consts';
           </h2>
           <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate">
             These captures come from the validated QEMU/KVM configuration documented with the
-            release. Screenshots show the interface; the live ISO lets you use it.
+            release. The fastest way past screenshots is the live ISO itself.
           </p>
         </div>
         <div class="flex flex-wrap gap-3">

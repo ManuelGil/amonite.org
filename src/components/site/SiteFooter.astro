@@ -1,6 +1,6 @@
 ---
 import Logo from '../shared/Logo.astro';
-import { COMMUNITY_URL, DISTRIBUTION, SITE_TITLE, SOURCE_URL, SPONSORS_URL } from '../../consts';
+import { COMMUNITY_URL, DISTRIBUTION, DOWNLOAD_URL, SPONSORS_URL } from '../../consts';
 
 const year = new Date().getFullYear();
 ---
@@ -10,7 +10,7 @@ const year = new Date().getFullYear();
     <div class="sm:col-span-2 lg:col-span-1">
       <div class="mb-3 flex items-center gap-2 text-graphite">
         <Logo size="sm" />
-        <span class="text-sm font-semibold tracking-tight">{SITE_TITLE}</span>
+        <span class="text-sm font-semibold tracking-tight">Amonite</span>
       </div>
       <p class="max-w-xs text-sm leading-relaxed text-slate">
         An independent GNU/Linux distribution by Manuel Gil.
@@ -32,8 +32,8 @@ const year = new Date().getFullYear();
       <p class="label-mono font-medium text-amber">Get started</p>
       <ul class="mt-3 space-y-2 text-sm text-slate">
         <li><a href="/downloads" class="hover:text-graphite">Downloads</a></li>
-        <li><a href={SOURCE_URL} class="hover:text-graphite">GitHub</a></li>
-        <li><a href={COMMUNITY_URL} class="hover:text-graphite">Reddit</a></li>
+        <li><a href={DOWNLOAD_URL} class="hover:text-graphite">GitHub Releases</a></li>
+        <li><a href={COMMUNITY_URL} class="hover:text-graphite">r/Amonite</a></li>
         <li><a href={SPONSORS_URL} class="hover:text-graphite">Sponsors</a></li>
       </ul>
     </div>
