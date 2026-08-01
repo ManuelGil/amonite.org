@@ -3,7 +3,15 @@
  * Dark band pointing at /downloads. Facts in the system voice; one accent action.
  */
 import ActionLink from './ActionLink.astro';
-import { DISTRIBUTION } from '../../consts';
+import { DISTRIBUTION, PUBLIC_EDITIONS } from '../../consts';
+
+const availableEditions = PUBLIC_EDITIONS.filter(
+  (edition) => edition.status === 'available',
+);
+const availableLabel =
+  availableEditions.length > 0
+    ? `${availableEditions.map((edition) => edition.name).join(' and ')} available`
+    : 'Editions';
 ---
 
 <aside class="border border-border bg-graphite text-mist">
@@ -16,7 +24,7 @@ import { DISTRIBUTION } from '../../consts';
         Get the operating system
       </h2>
       <p class="mt-3 max-w-xl text-sm leading-relaxed text-mist/75 sm:text-[0.95rem] sm:leading-relaxed">
-        Standard and Lite are published. Download and verify the current releases.
+        {`${availableLabel}. Download and verify current releases.`}
       </p>
       <p class="mt-5 font-mono text-xs text-mist/50">
         {DISTRIBUTION.isoFileName} · SHA256 · GPG signed
@@ -37,7 +45,7 @@ import { DISTRIBUTION } from '../../consts';
         external
         class="text-center text-mist/80 decoration-mist/30 hover:text-mist hover:decoration-mist/60 sm:text-right"
       >
-        Open Standard release
+        {`Open ${DISTRIBUTION.editionName} release`}
       </ActionLink>
     </div>
   </div>

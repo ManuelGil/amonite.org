@@ -25,7 +25,7 @@ Repository docs exist only to help people build, maintain, or contribute to this
 
 1. This repository is the **website only**. The distribution is external.
 2. Do not duplicate product narrative in maintainer docs when the website already states it.
-3. Distribution facts are content in `src/data/distribution.ts` as Product → Series → Edition → Release → Publication → Artifacts. Series owns major version and codename for every edition. Public pages render only editions with `isPublic: true` (currently Lite and Standard). Internal editions may exist in the model without public presentation. Product pages present public editions; Downloads presents their release media.
+3. Distribution facts are content in `src/data/distribution.ts` as Product → Series → Edition → Release → Publication → Artifacts. Series owns major version and codename for every edition. `EDITIONS` is the source of truth; public views are derived from that collection (`isPublic: true`). The UI must not assume how many editions exist. Edition states are available, experimental, or planned. Internal editions may exist without public presentation. Product pages present public editions; Downloads renders each edition from its data (release media when present).
 4. Website package version ≠ distribution release.
 5. Public copy is current and verifiable only. No roadmaps, dates, or speculative promises.
 6. Series and stage stay distinct (e.g. Nautilus · Alpha).

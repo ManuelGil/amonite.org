@@ -12,10 +12,15 @@
  *   isPublic true  — rendered on the public website
  *   isPublic false — retained internally; not announced or discoverable
  *
- * Release / publication states:
+ * Edition states (edition-level only):
+ *   available    — public edition with a current release
+ *   experimental — public edition without a downloadable release yet
+ *   planned      — recognized; not announced for public use
+ *
+ * Release / publication states (version-level):
  *   published — public release with an official tag (part of product history)
  *   prepared  — editorial content complete; not yet a public release
- *   planned   — edition or release recognized; not yet in preparation
+ *   planned   — release recognized; not yet in preparation
  *
  * Artifact evidence (SHA-256, size) may remain null after publication until
  * the release pipeline provides it. Null evidence does not mean the release
@@ -23,6 +28,7 @@
  *
  * Do not infer publication from the presence of a version number.
  * Never invent checksums, sizes, filenames, or download URLs.
+ * The UI iterates editions from data; it must not assume how many exist.
  */
 
 const DOWNLOAD_URL = 'https://github.com/ManuelGil/amonite' as const;
@@ -36,7 +42,7 @@ const TERMINAL = 'Kitty' as const;
 const INSTALLER = 'Calamares' as const;
 
 /** Edition lifecycle relative to public availability. */
-export type EditionStatus = 'published' | 'prepared' | 'planned';
+export type EditionStatus = 'available' | 'experimental' | 'planned';
 
 /** Release publication state. Independent of edition existence. */
 export type ReleaseState = 'published' | 'prepared' | 'planned';
@@ -297,8 +303,8 @@ export const EDITIONS = {
     name: 'Lite',
     productName: 'Amonite Lite',
     seriesId: CURRENT_SERIES.id,
-    status: 'published' as const satisfies EditionStatus,
-    statusLabel: 'Published',
+    status: 'available' as const satisfies EditionStatus,
+    statusLabel: 'Available',
     statusDetail: 'Official edition with a published alpha release.',
     audience: 'Users who want a minimal desktop assembled from independent components.',
     difference:
@@ -335,8 +341,8 @@ export const EDITIONS = {
     name: 'Standard',
     productName: 'Amonite Standard',
     seriesId: CURRENT_SERIES.id,
-    status: 'published' as const satisfies EditionStatus,
-    statusLabel: 'Published',
+    status: 'available' as const satisfies EditionStatus,
+    statusLabel: 'Available',
     statusDetail: 'Official edition with a published alpha release.',
     audience:
       'The default edition for users who need a complete desktop experience for desktop work, development, administration, and local AI.',
@@ -353,7 +359,7 @@ export const EDITIONS = {
       {
         title: 'Desktop Computing',
         body: 'Everyday computing from the first login: a graphical environment with networking, multimedia, storage management, and web browsing ready without assembly.',
-        via: `Default desktop: ${DESKTOP}. Audio and multimedia through PipeWire. Web browsing through Firefox ESR, the browser maintained by the Debian project.`,
+        via: `Default desktop: ${DESKTOP}. Audio and multimedia through PipeWire. Web browsing through LibreWolf.`,
       },
       {
         title: 'Software Development',
@@ -440,6 +446,30 @@ export const EDITIONS = {
       },
     ] as const,
   },
+  mobile: {
+    id: 'mobile',
+    name: 'Mobile',
+    productName: 'Amonite Mobile',
+    seriesId: CURRENT_SERIES.id,
+    status: 'experimental' as const satisfies EditionStatus,
+    statusLabel: 'Experimental',
+    statusDetail: 'Experimental edition. No downloadable release yet.',
+    audience: null,
+    difference: null,
+    role: null,
+    isDefault: false,
+    isPublic: true,
+    platform: PLATFORM,
+    desktop: null,
+    terminal: null,
+    installer: null,
+    capabilities: [] as const,
+    cliSummary: null,
+    validatedConfiguration: null,
+    releases: {} as const,
+    currentReleaseId: null,
+    releaseHistory: [] as const,
+  },
   pro: {
     id: 'pro',
     name: 'Pro',
@@ -468,11 +498,16 @@ export const EDITIONS = {
 
 export type EditionId = keyof typeof EDITIONS;
 
-/** Full product catalog order, including internal editions. */
-export const PRODUCT_EDITION_ORDER = ['lite', 'standard', 'pro'] as const satisfies readonly EditionId[];
-
-/** Release-oriented order for downloadable media (includes internal editions). */
-export const RELEASE_EDITION_ORDER = ['standard', 'lite', 'pro'] as const satisfies readonly EditionId[];
+/**
+ * Single catalog order for all editions.
+ * Public views are derived by filtering isPublic — do not maintain parallel lists.
+ */
+export const EDITION_ORDER = [
+  'standard',
+  'lite',
+  'mobile',
+  'pro',
+] as const satisfies readonly EditionId[];
 
 export const DEFAULT_EDITION_ID: EditionId = 'standard';
 export const DEFAULT_EDITION = EDITIONS[DEFAULT_EDITION_ID];
@@ -504,6 +539,7 @@ function projectEdition(id: EditionId) {
     role: edition.role,
     isDefault: edition.isDefault,
     isPublic: edition.isPublic,
+    releaseHistory: edition.releaseHistory,
     currentRelease: currentRelease
       ? {
           state: currentRelease.state,
@@ -515,6 +551,8 @@ function projectEdition(id: EditionId) {
           label: currentRelease.label,
           summary: currentRelease.summary,
           highlights: currentRelease.notes.highlights,
+          whatsNew:
+            'whatsNew' in currentRelease.notes ? currentRelease.notes.whatsNew : null,
           direction:
             'direction' in currentRelease.notes
               ? currentRelease.notes.direction
@@ -524,6 +562,7 @@ function projectEdition(id: EditionId) {
           isoFileName: currentRelease.artifacts.iso.filename,
           isoUrl: currentRelease.artifacts.iso.href,
           sha256: currentRelease.artifacts.iso.evidence.sha256,
+          sizeBytes: currentRelease.artifacts.iso.evidence.sizeBytes,
           verifyGuideHref: currentRelease.verifyGuide.href,
           releasePageHref: currentRelease.releasePage.href,
         }
@@ -535,15 +574,8 @@ function isPublicEdition(id: EditionId): boolean {
   return EDITIONS[id].isPublic;
 }
 
-/** Public editions for product-first presentation. */
-export const PUBLIC_EDITIONS = PRODUCT_EDITION_ORDER.filter(isPublicEdition).map(
-  projectEdition,
-);
-
-/** Public editions for release-oriented pages such as Downloads. */
-export const RELEASE_EDITIONS = RELEASE_EDITION_ORDER.filter(isPublicEdition).map(
-  projectEdition,
-);
+/** Public editions derived from EDITION_ORDER. Source of truth for UI loops. */
+export const PUBLIC_EDITIONS = EDITION_ORDER.filter(isPublicEdition).map(projectEdition);
 
 /**
  * Compatibility projection used by existing pages.
@@ -589,7 +621,7 @@ export const DISTRIBUTION = {
   capabilities: DEFAULT_EDITION.capabilities,
   cliSummary: DEFAULT_EDITION.cliSummary,
   validatedConfiguration: DEFAULT_EDITION.validatedConfiguration,
-  /** Edition-specific history for Standard. */
+  /** Release history for the default edition. Prefer PUBLIC_EDITIONS for multi-edition history. */
   releaseHistory: DEFAULT_EDITION.releaseHistory,
   artifacts: {
     verifyGuide: CURRENT_RELEASE.verifyGuide,

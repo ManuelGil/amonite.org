@@ -10,9 +10,15 @@ import firstBoot from '../assets/screenshots/first-boot.png';
 import terminalFastfetch from '../assets/screenshots/terminal-fastfetch.png';
 import {
   DISTRIBUTION,
+  PUBLIC_EDITIONS,
   SITE_DESCRIPTION,
   SOFTWARE_APPLICATION_JSONLD,
 } from '../consts';
+
+const editionNames = PUBLIC_EDITIONS.map((edition) => edition.name).join(' · ');
+const availableEditions = PUBLIC_EDITIONS.filter(
+  (edition) => edition.status === 'available',
+);
 ---
 
 <Layout
@@ -26,7 +32,7 @@ import {
     <div class="mx-auto grid max-w-6xl gap-12 px-6 py-16 sm:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14 lg:py-24">
       <div>
         <p class="label-mono font-medium text-sand">
-          GNU/Linux · Lite · Standard
+          {`GNU/Linux · ${editionNames}`}
         </p>
         <h1 class="display-serif mt-4 text-5xl leading-none text-mist sm:text-6xl">
           {DISTRIBUTION.name}
@@ -47,7 +53,10 @@ import {
           </ActionLink>
         </div>
         <p class="mt-8 font-mono text-xs leading-relaxed text-mist/50">
-          Standard and Lite are published<br />
+          {availableEditions.length > 0
+            ? `${availableEditions.map((edition) => edition.name).join(' and ')} available`
+            : 'Editions'}
+          <br />
           <a
             href="/downloads"
             class="underline decoration-mist/30 underline-offset-4 hover:text-mist/80"
@@ -101,13 +110,13 @@ import {
       <div class="max-w-2xl">
         <p class="label-mono font-medium text-amber">Official editions</p>
         <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-          One product. Two editions.
+          One product. Multiple editions.
         </h2>
         <p class="mt-4 text-base leading-relaxed text-slate">
           Each edition has its own release lifecycle.
         </p>
         <p class="mt-3 text-base leading-relaxed text-slate">
-          Standard and Lite are editions in the current {DISTRIBUTION.series} release series.
+          Public editions belong to the current {DISTRIBUTION.series} release series.
         </p>
       </div>
       <EditionOverview class="mt-12" />

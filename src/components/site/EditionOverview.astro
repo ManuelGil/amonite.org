@@ -2,6 +2,7 @@
 /**
  * Product-first overview of official Amonite editions.
  * Answers who each edition is for, what distinguishes it or its role, and its state.
+ * Renders every public edition from data — does not assume how many exist.
  */
 import { PUBLIC_EDITIONS } from '../../consts';
 
@@ -30,14 +31,9 @@ const { class: className = '' } = Astro.props;
           {edition.difference && <p>{edition.difference}</p>}
           {edition.role && <p>{edition.role}</p>}
           <p>{edition.statusDetail}</p>
-          {edition.status === 'published' && edition.currentRelease && (
+          {edition.currentRelease && (
             <p class="font-mono text-xs text-slate/80">
               Current release · {edition.currentRelease.version}
-            </p>
-          )}
-          {edition.status === 'prepared' && edition.currentRelease && (
-            <p class="font-mono text-xs text-slate/80">
-              Prepared release · {edition.currentRelease.version}
             </p>
           )}
         </div>
