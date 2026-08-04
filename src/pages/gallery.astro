@@ -12,26 +12,39 @@ import fileManager from '../assets/screenshots/file-manager.png';
 import settingsManager from '../assets/screenshots/settings-manager.png';
 import applicationsMenu from '../assets/screenshots/applications-menu.png';
 import { DISTRIBUTION } from '../consts';
+import { formatCopy, getCopy, getLocale, localizedPath, type Locale } from '../i18n';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const copy = getCopy(locale);
+const gallery = copy.gallery;
 ---
 
 <Layout
-  title="Gallery"
-  description={`What the ${DISTRIBUTION.name} Standard ${DISTRIBUTION.series} ${DISTRIBUTION.stage} release looks like as shipped: first boot, terminal, welcome handbook, installer, and everyday tools.`}
+  locale={locale}
+  title={copy.meta.gallery.title}
+  description={copy.meta.gallery.description}
   image={firstBoot}
 >
   <PageHeader
-    eyebrow="Gallery"
-    title="The system as shipped"
-    lead={`Captures of ${DISTRIBUTION.name} Standard ${DISTRIBUTION.release} running from the live ISO. Window images are cropped to the window. Nothing is staged or retouched.`}
+    eyebrow={gallery.eyebrow}
+    title={gallery.heading}
+    lead={formatCopy(gallery.lead, {
+      name: DISTRIBUTION.name,
+      release: DISTRIBUTION.release,
+    })}
   />
 
   <article class="mx-auto max-w-5xl space-y-16 px-6 py-16 sm:space-y-20 sm:py-20">
     <section>
       <Screenshot
         image={firstBoot}
-        alt="Amonite live session at first boot, with the Welcome handbook and the installer open on an otherwise empty desktop"
+        alt={gallery.alts[0]}
         label="01"
-        caption="First boot of the live session. The Welcome handbook and the installer open on an otherwise empty desktop. Everything else stays out of the way."
+        caption={gallery.captions[0]}
         loading="eager"
         fetchpriority="high"
       />
@@ -40,36 +53,39 @@ import { DISTRIBUTION } from '../consts';
     <section>
       <Screenshot
         image={terminalFastfetch}
-        alt="Maximized terminal showing fastfetch output with the Amonite ASCII mark and system details"
+        alt={gallery.alts[1]}
         label="02"
-        caption={`fastfetch in the maximized terminal, reporting the Standard edition as shipped: ${DISTRIBUTION.name} ${DISTRIBUTION.release} (${DISTRIBUTION.series}) on Debian with XFCE, 817 packages.`}
+        caption={formatCopy(gallery.captions[1], {
+          name: DISTRIBUTION.name,
+          release: DISTRIBUTION.release,
+          series: DISTRIBUTION.series,
+        })}
       />
     </section>
 
     <section>
       <div class="mb-8 max-w-xl">
-        <p class="label-mono font-medium text-amber">A first session</p>
-        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-          A system that explains itself
+        <p class="label-mono font-medium text-accent">{gallery.firstSessionEyebrow}</p>
+        <h2 class="display-serif mt-3 text-2xl text-text sm:text-3xl">
+          {gallery.firstSessionHeading}
         </h2>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          The Welcome handbook gives the live session a place to begin. Your System then shows
-          what is actually running.
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {gallery.firstSessionBody}
         </p>
       </div>
       <div class="grid gap-8 lg:grid-cols-2 lg:gap-10">
         <Screenshot
           image={welcomeHandbook}
-          alt="Amonite Welcome application on its Welcome page, explaining what Amonite is and why it stays minimal"
+          alt={gallery.alts[2]}
           label="03"
-          caption="The Welcome handbook. A short introduction, not a control panel: what Amonite is, who it is for, and why it stays minimal."
+          caption={gallery.captions[2]}
           sizes="(max-width: 1024px) 100vw, 30rem"
         />
         <Screenshot
           image={welcomeYourSystem}
-          alt="Your System page of the Welcome application listing distribution, Debian version, desktop, kernel, and hardware"
+          alt={gallery.alts[3]}
           label="04"
-          caption="Your System reports the installation in plain terms: distribution, Debian version, desktop, session, kernel, and hardware."
+          caption={gallery.captions[3]}
           sizes="(max-width: 1024px) 100vw, 30rem"
         />
       </div>
@@ -78,9 +94,9 @@ import { DISTRIBUTION } from '../consts';
     <section>
       <Screenshot
         image={installerPartitions}
-        alt="Amonite installer (Calamares) at the partitioning step, offering erase disk, manual partitioning, and system encryption"
+        alt={gallery.alts[4]}
         label="05"
-        caption="The installer (Calamares) at the partitioning step. Erase disk or partition manually; encrypted installation is a checkbox, not a project."
+        caption={gallery.captions[4]}
         class="mx-auto max-w-3xl"
         sizes="(max-width: 1024px) 100vw, 48rem"
       />
@@ -88,28 +104,27 @@ import { DISTRIBUTION } from '../consts';
 
     <section>
       <div class="mb-8 max-w-xl">
-        <p class="label-mono font-medium text-amber">Everyday work</p>
-        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-          Nothing between you and the desktop
+        <p class="label-mono font-medium text-accent">{gallery.everydayEyebrow}</p>
+        <h2 class="display-serif mt-3 text-2xl text-text sm:text-3xl">
+          {gallery.everydayHeading}
         </h2>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          Once the system is running, the ordinary tools are quiet and familiar: files, settings,
-          and the applications menu.
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {gallery.everydayBody}
         </p>
       </div>
       <div class="grid gap-8 lg:grid-cols-2 lg:gap-10">
         <Screenshot
           image={fileManager}
-          alt="Thunar file manager showing the home directory of the live user"
+          alt={gallery.alts[5]}
           label="06"
-          caption="Thunar, the XFCE file manager, showing the ordinary home directory waiting for its first files."
+          caption={gallery.captions[5]}
           sizes="(max-width: 1024px) 100vw, 30rem"
         />
         <Screenshot
           image={settingsManager}
-          alt="XFCE Settings Manager with personal, hardware, and system sections"
+          alt={gallery.alts[6]}
           label="07"
-          caption="The XFCE Settings Manager: familiar controls, close at hand, without another layer between you and the desktop."
+          caption={gallery.captions[6]}
           sizes="(max-width: 1024px) 100vw, 30rem"
         />
       </div>
@@ -118,9 +133,9 @@ import { DISTRIBUTION } from '../consts';
     <section>
       <Screenshot
         image={applicationsMenu}
-        alt="Applications menu open over an empty desktop, listing terminal, file manager, mail reader, web browser, and category submenus"
+        alt={gallery.alts[7]}
         label="08"
-        caption="The applications menu as shipped: a terminal, a file manager, mail, a browser, and the standard categories. The desktop behind it is intentionally bare."
+        caption={gallery.captions[7]}
         class="mx-auto max-w-2xl"
         sizes="(max-width: 1024px) 100vw, 42rem"
       />
@@ -129,16 +144,15 @@ import { DISTRIBUTION } from '../consts';
     <section class="border-t border-border pt-10">
       <div class="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
         <div>
-          <h2 class="text-lg font-semibold tracking-tight text-graphite">
-            See it before you install
+          <h2 class="text-lg font-semibold tracking-tight text-text">
+          {gallery.beforeInstallHeading}
           </h2>
-          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate">
-            These captures come from the validated QEMU/KVM configuration documented with the
-            release. The fastest way past screenshots is the live ISO itself.
+          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-text-muted">
+            {gallery.beforeInstallBody}
           </p>
         </div>
         <div class="flex flex-wrap gap-3">
-          <ActionLink href="/downloads">Downloads</ActionLink>
+          <ActionLink href={localizedPath(locale, 'downloads')}>{gallery.downloads}</ActionLink>
         </div>
       </div>
     </section>

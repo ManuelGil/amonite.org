@@ -3,37 +3,51 @@ import Layout from '../layouts/Layout.astro';
 import ActionLink from '../components/site/ActionLink.astro';
 import PageHeader from '../components/site/PageHeader.astro';
 import { DISTRIBUTION, PUBLIC_EDITIONS, SOFTWARE_APPLICATION_JSONLD } from '../consts';
+import {
+  LOCALE_CODES,
+  formatCopy,
+  getCopy,
+  getEditionCopy,
+  getLocale,
+  getReleaseCopy,
+  localizedPath,
+  SHARED_COPY,
+  type Locale,
+} from '../i18n';
 
-const { validatedConfiguration, releaseNotes } = DISTRIBUTION;
+export interface Props {
+  locale?: Locale;
+}
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const copy = getCopy(locale);
+const shared = SHARED_COPY[locale];
+const downloads = copy.downloads;
+const defaultReleaseCopy = getReleaseCopy(
+  locale,
+  DISTRIBUTION.editionId,
+  DISTRIBUTION.release,
+);
+const { validatedConfiguration } = DISTRIBUTION;
 const { artifacts } = DISTRIBUTION;
 
 const configuration = [
-  { label: 'Architecture', value: validatedConfiguration.architecture },
-  { label: 'CPU', value: validatedConfiguration.cpu },
-  { label: 'Memory', value: validatedConfiguration.memory },
-  { label: 'Storage', value: validatedConfiguration.storage },
-  { label: 'Firmware', value: validatedConfiguration.firmware },
-  { label: 'Virtualization platform', value: validatedConfiguration.virtualization },
-  { label: 'Installed system size', value: validatedConfiguration.installedSize },
+  { label: copy.product.validated.architecture, value: validatedConfiguration.architecture },
+  { label: copy.product.validated.cpu, value: validatedConfiguration.cpu },
+  { label: copy.product.validated.memory, value: validatedConfiguration.memory },
+  { label: copy.product.validated.storage, value: validatedConfiguration.storage },
+  { label: copy.product.validated.firmware, value: validatedConfiguration.firmware },
+  { label: copy.product.validated.virtualization, value: validatedConfiguration.virtualization },
+  { label: copy.product.validated.installedSize, value: validatedConfiguration.installedSize },
 ];
 
 const editionsWithHistory = PUBLIC_EDITIONS.filter(
   (edition) => edition.releaseHistory.length > 0,
 );
 
-const downloadDescription = (() => {
-  const withRelease = PUBLIC_EDITIONS.filter((edition) => edition.currentRelease);
-  if (withRelease.length === 0) {
-    return 'Download and verify Amonite editions.';
-  }
-  return `Download and verify ${withRelease
-    .map((edition) => `Amonite ${edition.name} ${edition.currentRelease!.version}`)
-    .join(' and ')}.`;
-})();
-
 /** Localized publication date from Publication.publishedAt (UTC calendar day). */
 function formatPublicationDate(isoDate: string): string {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(LOCALE_CODES[locale], {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
@@ -42,108 +56,126 @@ function formatPublicationDate(isoDate: string): string {
 }
 
 function formatIsoSize(sizeBytes: number | null): string | null {
-  return sizeBytes !== null ? new Intl.NumberFormat('en-US').format(sizeBytes) : null;
+  return sizeBytes !== null ? new Intl.NumberFormat(LOCALE_CODES[locale]).format(sizeBytes) : null;
 }
 ---
 
 <Layout
-  title="Downloads"
-  description={downloadDescription}
-  structuredData={[SOFTWARE_APPLICATION_JSONLD]}
+  locale={locale}
+  title={copy.meta.downloads.title}
+  description={copy.meta.downloads.description}
+  structuredData={[
+    {
+      ...SOFTWARE_APPLICATION_JSONLD,
+      description: copy.meta.downloads.description,
+      inLanguage: locale,
+    },
+  ]}
 >
   <PageHeader
-    eyebrow="Downloads"
-    title="Current releases"
-    lead="Published release media and verification for Amonite editions. Edition purpose is described on the home page."
+    eyebrow={downloads.eyebrow}
+    title={downloads.heading}
+    lead={downloads.lead}
   />
 
   <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
     {
       PUBLIC_EDITIONS.map((edition) => {
         const release = edition.currentRelease;
+        const releaseCopy = release
+          ? getReleaseCopy(locale, edition.id, release.version)
+          : null;
+        const editionCopy = getEditionCopy(locale, edition.id);
+        const statusLabel =
+          edition.status === 'available'
+            ? copy.common.available
+            : edition.status === 'experimental'
+              ? copy.common.experimental
+              : edition.statusLabel;
 
         if (release) {
           const isoSize = formatIsoSize(release.sizeBytes);
 
           return (
-            <section id={edition.id} class="border border-border bg-sand/15 p-8 sm:p-10">
+            <section id={edition.id} class="border border-border bg-surface-soft p-8 sm:p-10">
               <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
                 <div>
-                  <p class="label-mono font-medium text-amber">
-                    {edition.name} · {edition.statusLabel}
+                  <p class="label-mono font-medium text-accent">
+                    {edition.name} · {statusLabel}
                   </p>
-                  <h2 class="mt-3 text-2xl font-semibold tracking-tight text-graphite sm:text-3xl">
-                    {release.title}
+                  <h2 class="mt-3 text-2xl font-semibold tracking-tight text-text sm:text-3xl">
+                    {releaseCopy.title}
                   </h2>
-                  <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-                    {`${release.summary} This is Alpha software.`}
+                  <p class="mt-3 max-w-2xl text-base leading-relaxed text-text-muted">
+                    {releaseCopy.summary}
                   </p>
-                  {release.direction && (
-                    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate">
-                      {release.direction}
+                  {releaseCopy.direction && (
+                    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-text-muted">
+                      {releaseCopy.direction}
                     </p>
                   )}
                   <dl class="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-2 lg:grid-cols-4">
                     <div>
-                      <dt class="text-sm text-slate">Edition</dt>
-                      <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                      <dt class="text-sm text-text-muted">{copy.common.edition}</dt>
+                      <dd class="mt-1 font-mono text-sm font-medium text-text">
                         {edition.name}
                       </dd>
                     </div>
                     <div>
-                      <dt class="text-sm text-slate">Series</dt>
-                      <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                      <dt class="text-sm text-text-muted">{copy.common.series}</dt>
+                      <dd class="mt-1 font-mono text-sm font-medium text-text">
                         {release.series}
                       </dd>
                     </div>
                     <div>
-                      <dt class="text-sm text-slate">Version</dt>
-                      <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                      <dt class="text-sm text-text-muted">{copy.common.version}</dt>
+                      <dd class="mt-1 font-mono text-sm font-medium text-text">
                         {release.version}
                       </dd>
                     </div>
                     {release.publishedAt && (
                       <div>
-                        <dt class="text-sm text-slate">Published</dt>
-                        <dd class="mt-1 font-mono text-sm font-medium text-graphite">
+                        <dt class="text-sm text-text-muted">{copy.common.published}</dt>
+                        <dd class="mt-1 font-mono text-sm font-medium text-text">
                           {formatPublicationDate(release.publishedAt)}
                         </dd>
                       </div>
                     )}
                   </dl>
-                  <p class="mt-3 break-all font-mono text-xs text-slate">
-                    Tag · {release.tag}
+                  <p class="mt-3 break-all font-mono text-xs text-text-muted">
+                    {copy.common.tag} · {release.tag}
                   </p>
                   <div class="mt-8 border-t border-border pt-6">
-                    <p class="label-mono text-amber">Release image</p>
+                    <p class="label-mono text-accent">{shared.releaseImage}</p>
                     {release.isoUrl && release.isoFileName && (
                       <a
                         href={release.isoUrl}
-                        class="mt-2 block break-all font-mono text-sm text-graphite underline decoration-border underline-offset-4 hover:decoration-slate"
+                        class="mt-2 block break-all font-mono text-sm text-text underline decoration-border underline-offset-4 hover:decoration-text-muted"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         {release.isoFileName}
+                        <span class="sr-only"> {shared.opensNewTab}</span>
                       </a>
                     )}
-                    <p class="mt-2 text-sm text-slate">
+                    <p class="mt-2 text-sm text-text-muted">
                       {validatedConfiguration.architecture}
-                      {isoSize ? ` · ${isoSize} bytes` : ''}
+                      {isoSize ? ` · ${isoSize} ${shared.bytes}` : ''}
                     </p>
                     {release.sha256 && (
-                      <p class="mt-3 text-xs leading-relaxed text-slate">
-                        SHA-256
-                        <code class="ml-1 break-all font-mono text-[0.7rem] text-graphite">
+                      <p class="mt-3 text-xs leading-relaxed text-text-muted">
+                        {copy.common.sha256}
+                        <code class="ml-1 break-all font-mono text-[0.7rem] text-text">
                           {release.sha256}
                         </code>
                       </p>
                     )}
                   </div>
-                  {release.highlights.length > 0 && (
-                    <ul class="mt-8 space-y-2 border-t border-border pt-6 text-sm leading-relaxed text-slate">
-                      {release.highlights.map((item) => (
+                  {releaseCopy.highlights.length > 0 && (
+                    <ul class="mt-8 space-y-2 border-t border-border pt-6 text-sm leading-relaxed text-text-muted">
+                      {releaseCopy.highlights.map((item) => (
                         <li class="flex gap-2">
-                          <span class="font-mono text-amber" aria-hidden="true">
+                          <span class="font-mono text-accent" aria-hidden="true">
                             ·
                           </span>
                           {item}
@@ -151,9 +183,9 @@ function formatIsoSize(sizeBytes: number | null): string | null {
                       ))}
                     </ul>
                   )}
-                  {release.evaluationNotice && (
-                    <p class="mt-6 text-sm leading-relaxed text-slate">
-                      {release.evaluationNotice}
+                  {releaseCopy.evaluationNotice && (
+                    <p class="mt-6 text-sm leading-relaxed text-text-muted">
+                      {releaseCopy.evaluationNotice}
                     </p>
                   )}
                 </div>
@@ -161,19 +193,19 @@ function formatIsoSize(sizeBytes: number | null): string | null {
                   {release.isoUrl && release.isoFileName && (
                     <>
                       <ActionLink href={release.isoUrl} external>
-                        Download ISO
+                        {copy.common.downloadIso}
                       </ActionLink>
-                      <p class="font-mono text-center text-xs text-slate lg:text-right">
-                        Direct download · {release.isoFileName}
+                      <p class="font-mono text-center text-xs text-text-muted lg:text-right">
+                        {copy.common.directDownload} · {release.isoFileName}
                       </p>
                     </>
                   )}
                   <ActionLink href={release.verifyGuideHref} variant="ghost" external>
-                    Verification guide
+                    {copy.common.verificationGuide}
                   </ActionLink>
                   {release.releasePageHref && (
                     <ActionLink href={release.releasePageHref} variant="ghost" external>
-                      Release notes on GitHub
+                      {copy.common.releaseNotes}
                     </ActionLink>
                   )}
                 </div>
@@ -183,18 +215,18 @@ function formatIsoSize(sizeBytes: number | null): string | null {
         }
 
         return (
-          <section id={edition.id} class="border border-border bg-sand/15 p-8 sm:p-10">
-            <p class="label-mono font-medium text-amber">
-              {edition.name} · {edition.statusLabel}
+          <section id={edition.id} class="border border-border bg-surface-soft p-8 sm:p-10">
+            <p class="label-mono font-medium text-accent">
+              {edition.name} · {statusLabel}
             </p>
-            <h2 class="mt-3 text-2xl font-semibold tracking-tight text-graphite sm:text-3xl">
+            <h2 class="mt-3 text-2xl font-semibold tracking-tight text-text sm:text-3xl">
               {edition.productName}
             </h2>
-            <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-              {edition.statusDetail}
+            <p class="mt-3 max-w-2xl text-base leading-relaxed text-text-muted">
+              {editionCopy?.statusDetail ?? edition.statusDetail}
             </p>
-            {edition.audience && (
-              <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate">{edition.audience}</p>
+            {editionCopy?.audience && (
+              <p class="mt-4 max-w-2xl text-sm leading-relaxed text-text-muted">{editionCopy.audience}</p>
             )}
           </section>
         );
@@ -202,17 +234,17 @@ function formatIsoSize(sizeBytes: number | null): string | null {
     }
 
     <section>
-      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        {DISTRIBUTION.editionName} What's New
+      <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+        {formatCopy(downloads.whatsNewHeading, { edition: DISTRIBUTION.editionName })}
       </h2>
-      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-        {releaseNotes.whatsNew.intro}
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-text-muted">
+        {defaultReleaseCopy.whatsNew.intro}
       </p>
-      <ul class="mt-6 max-w-2xl space-y-2 text-sm leading-relaxed text-slate">
+      <ul class="mt-6 max-w-2xl space-y-2 text-sm leading-relaxed text-text-muted">
         {
-          releaseNotes.whatsNew.improvements.map((item) => (
+          defaultReleaseCopy.whatsNew.improvements.map((item) => (
             <li class="flex gap-2">
-              <span class="font-mono text-amber" aria-hidden="true">
+              <span class="font-mono text-accent" aria-hidden="true">
                 ·
               </span>
               {item}
@@ -220,30 +252,36 @@ function formatIsoSize(sizeBytes: number | null): string | null {
           ))
         }
       </ul>
-      <p class="mt-6 max-w-2xl text-sm leading-relaxed text-slate">
-        {releaseNotes.whatsNew.closing}
+      <p class="mt-6 max-w-2xl text-sm leading-relaxed text-text-muted">
+        {defaultReleaseCopy.whatsNew.closing}
       </p>
-      <p class="mt-6 max-w-2xl text-sm leading-relaxed text-slate">{releaseNotes.notes}</p>
+      <p class="mt-6 max-w-2xl text-sm leading-relaxed text-text-muted">
+        {defaultReleaseCopy.evaluationNotice}
+      </p>
     </section>
 
     <section class="grid gap-10 lg:grid-cols-2 lg:gap-16">
       <div>
-        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-          Validated configuration
+        <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+          {downloads.configurationHeading}
         </h2>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          {`The configuration used to validate the current ${DISTRIBUTION.editionName} ${DISTRIBUTION.series} ${DISTRIBUTION.stage} release. A practical reference, not a statement of minimum or recommended requirements.`}
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {formatCopy(downloads.configurationBody, {
+            edition: DISTRIBUTION.editionName,
+            series: DISTRIBUTION.series,
+            stage: copy.common.alpha,
+          })}
         </p>
         <table class="mt-8 w-full border-t border-border text-sm">
-          <caption class="sr-only">Validated hardware configuration</caption>
+          <caption class="sr-only">{downloads.configurationCaption}</caption>
           <tbody>
             {
               configuration.map((row) => (
                 <tr class="border-b border-border">
-                  <th scope="row" class="py-3 pr-6 text-left font-normal text-slate">
+                  <th scope="row" class="py-3 pr-6 text-left font-normal text-text-muted">
                     {row.label}
                   </th>
-                  <td class="py-3 text-right font-mono text-[0.8125rem] text-graphite">
+                  <td class="py-3 text-right font-mono text-[0.8125rem] text-text">
                     {row.value}
                   </td>
                 </tr>
@@ -253,18 +291,17 @@ function formatIsoSize(sizeBytes: number | null): string | null {
         </table>
       </div>
       <div>
-        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-          Validation results
+        <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+          {downloads.validationHeading}
         </h2>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          Before publishing, we exercised these paths on the validated configuration. Every item
-          below passed.
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {downloads.validationBody}
         </p>
-        <ul class="mt-8 grid gap-x-8 gap-y-2 border-t border-border pt-6 text-sm leading-relaxed text-slate sm:grid-cols-2">
+        <ul class="mt-8 grid gap-x-8 gap-y-2 border-t border-border pt-6 text-sm leading-relaxed text-text-muted sm:grid-cols-2">
           {
             validatedConfiguration.results.map((result) => (
               <li class="flex gap-2">
-                <span class="font-mono text-amber" aria-hidden="true">✓</span>
+                <span class="font-mono text-accent" aria-hidden="true">✓</span>
                 {result}
               </li>
             ))
@@ -274,51 +311,45 @@ function formatIsoSize(sizeBytes: number | null): string | null {
     </section>
 
     <section id="verification">
-      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        Verification
+      <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+        {downloads.verificationHeading}
       </h2>
-      <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-        Official releases are signed so you can check that the image came from Amonite and was not
-        changed. When a SHA-256 checksum is listed with a release, it provides an additional check
-        before writing installation media.
+      <p class="mt-3 max-w-2xl text-base leading-relaxed text-text-muted">
+        {downloads.verificationBody}
       </p>
-      <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate">
-        Releases can be checked independently. For the complete steps, read the <a
+      <p class="mt-4 max-w-2xl text-sm leading-relaxed text-text-muted">
+        {shared.verificationGuideIntro} <a
           href={artifacts.verifyGuide.href}
-          class="text-graphite underline decoration-border underline-offset-4 hover:decoration-slate"
+          class="text-text underline decoration-border underline-offset-4 hover:decoration-text-muted"
           target="_blank"
           rel="noopener noreferrer"
-        >official verification guide</a>.
+        >{copy.common.verificationGuide}<span class="sr-only"> {shared.opensNewTab}</span></a>.
       </p>
     </section>
 
     <section id="installation" class="grid gap-8 md:grid-cols-2">
-      <div class="border border-border bg-sand/15 p-8 sm:p-10">
-        <h2 class="text-xl font-semibold tracking-tight text-graphite">Installation</h2>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          Write the verified image to a USB drive, boot it, and follow the graphical
-          installer. The Installation Guide covers writing media, starting the installer,
-          and setting up the system.
+      <div class="border border-border bg-surface-soft p-8 sm:p-10">
+        <h2 class="text-xl font-semibold tracking-tight text-text">{downloads.installationHeading}</h2>
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {downloads.installationBody}
         </p>
         <div class="mt-6">
           <ActionLink href={DISTRIBUTION.artifacts.installGuide.href} external>
-            Read Installation Guide
+            {shared.installationGuide}
           </ActionLink>
         </div>
       </div>
 
-      <div class="border border-border bg-sand/15 p-8 sm:p-10">
-        <h2 class="text-xl font-semibold tracking-tight text-graphite">
-          Before you commit a disk
+      <div class="border border-border bg-surface-soft p-8 sm:p-10">
+        <h2 class="text-xl font-semibold tracking-tight text-text">
+          {downloads.beforeDiskHeading}
         </h2>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          The live session runs entirely from the USB drive, so you can evaluate the
-          system without touching installed disks. The installer only changes a disk when
-          you confirm the partitioning step.
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {downloads.beforeDiskBody}
         </p>
         <div class="mt-6">
-          <ActionLink href="/gallery" variant="secondary">
-            See the installer in the gallery
+          <ActionLink href={localizedPath(locale, 'gallery')} variant="secondary">
+            {downloads.gallery}
           </ActionLink>
         </div>
       </div>
@@ -327,29 +358,31 @@ function formatIsoSize(sizeBytes: number | null): string | null {
     {
       editionsWithHistory.map((edition) => (
         <section>
-          <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-            {edition.name} release history
+          <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+            {edition.name} · {shared.releaseHistory}
           </h2>
-          <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate">
-            Release history is edition-specific.
+          <p class="mt-3 max-w-2xl text-base leading-relaxed text-text-muted">
+            {downloads.historyBody}
           </p>
           <ul class="mt-8 divide-y divide-border border-y border-border">
             {edition.releaseHistory.map((release) => (
               <li class="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
-                  <p class="font-medium text-graphite">{release.label}</p>
-                  <p class="font-mono text-sm text-slate">{release.version}</p>
+                  <p class="font-medium text-text">
+                    {getReleaseCopy(locale, release.editionId, release.version).label}
+                  </p>
+                  <p class="font-mono text-sm text-text-muted">{release.version}</p>
                   {release.publishedAt && (
-                    <p class="font-mono text-sm text-slate">
+                    <p class="font-mono text-sm text-text-muted">
                       {formatPublicationDate(release.publishedAt)}
                     </p>
                   )}
                 </div>
                 {release.isCurrent ? (
-                  <p class="label-mono text-amber">Current release</p>
+                  <p class="label-mono text-accent">{copy.common.currentRelease}</p>
                 ) : release.href ? (
                   <ActionLink href={release.href} variant="ghost" external>
-                    Open release
+                    {copy.common.openRelease}
                   </ActionLink>
                 ) : null}
               </li>

@@ -3,33 +3,28 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import ActionLink from '../components/site/ActionLink.astro';
 import PageHeader from '../components/site/PageHeader.astro';
-import { DISTRIBUTION } from '../consts';
 import philosophyImage from '../assets/img/philosophy.jpg';
+import { getCopy, getLocale, localizedPath, type Locale } from '../i18n';
 
-const principles = [
-  {
-    title: 'Capability over accretion',
-    body: 'Software earns its place by enabling work. Transitive convenience is not enough.',
-  },
-  {
-    title: 'Replaceability',
-    body: 'Useful on day one must not become a trap on day thirty. Defaults stay open to substitution.',
-  },
-  {
-    title: 'User ownership',
-    body: 'The person at the keyboard remains in control. The operating system serves that ownership; it does not replace it.',
-  },
-];
+export interface Props {
+  locale?: Locale;
+}
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const copy = getCopy(locale);
+const philosophy = copy.philosophy;
+const principles = philosophy.principles;
 ---
 
 <Layout
-  title="Philosophy"
-  description="Why Amonite exists: every package earns its place by delivering a capability, without redefining Linux."
+  locale={locale}
+  title={copy.meta.philosophy.title}
+  description={copy.meta.philosophy.description}
 >
   <PageHeader
-    eyebrow="Philosophy"
-    title="Linux should remain Linux. Linux should remain yours."
-    lead="Amonite exists so the first day on a new machine delivers real capabilities, without rebuilding the system or giving up ownership of it."
+    eyebrow={philosophy.eyebrow}
+    title={philosophy.heading}
+    lead={philosophy.lead}
   />
 
   <article class="mx-auto max-w-6xl space-y-20 px-6 py-16 sm:space-y-24 sm:py-20">
@@ -37,7 +32,7 @@ const principles = [
       <figure>
         <Image
           src={philosophyImage}
-          alt="Ammonite fossil showing its spiral chambers and layered stone"
+          alt={philosophy.imageAlt}
           class="aspect-[4/3] w-full object-cover"
           width={1200}
           widths={[480, 800, 1200]}
@@ -45,48 +40,46 @@ const principles = [
           quality={82}
           format="webp"
         />
-        <figcaption class="mt-3 text-xs leading-relaxed text-slate">
-          A useful system begins with a clear shape.
+        <figcaption class="mt-3 text-xs leading-relaxed text-text-muted">
+          {philosophy.imageCaption}
         </figcaption>
       </figure>
       <div class="max-w-2xl">
-        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-          Why Amonite
+        <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+          {philosophy.whyHeading}
         </h2>
-        <p class="display-serif border-l-2 border-amber pl-6 text-xl leading-relaxed text-graphite sm:text-2xl">
-          {DISTRIBUTION.selectionPrinciple}
+        <p class="display-serif border-l-2 border-accent pl-6 text-xl leading-relaxed text-text sm:text-2xl">
+          {copy.product.selectionPrinciple}
         </p>
-        <p class="mt-8 text-base leading-relaxed text-slate">
-          People who choose Linux usually know what it can become. Friction comes earlier:
-          assembling a coherent day-one system from unrelated recommendations.
+        <p class="mt-8 text-base leading-relaxed text-text-muted">
+          {philosophy.frictionBody}
         </p>
-        <p class="mt-4 text-base leading-relaxed text-slate">
-          Amonite shortens that day. It does not invent a new kind of Linux. It delivers a
-          deliberate set of capabilities and leaves ownership with you.
+        <p class="mt-4 text-base leading-relaxed text-text-muted">
+          {philosophy.ownershipBody}
         </p>
       </div>
     </section>
 
     <section>
       <div class="max-w-2xl">
-        <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-          What makes it different
+        <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+          {philosophy.differenceHeading}
         </h2>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          Difference is not a package count. It is a rule for what may ship.
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {philosophy.differenceLead}
         </p>
       </div>
       <div class="mt-10 grid gap-10 border-t border-border pt-8 md:grid-cols-3 md:gap-8">
         {
           principles.map((principle, i) => (
             <div>
-              <span class="font-mono text-sm text-slate/60" aria-hidden="true">
+              <span class="font-mono text-sm text-text-muted/60" aria-hidden="true">
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <h3 class="mt-2 text-base font-semibold tracking-tight text-graphite">
+              <h3 class="mt-2 text-base font-semibold tracking-tight text-text">
                 {principle.title}
               </h3>
-              <p class="mt-3 text-sm leading-relaxed text-slate">{principle.body}</p>
+              <p class="mt-3 text-sm leading-relaxed text-text-muted">{principle.body}</p>
             </div>
           ))
         }
@@ -94,17 +87,15 @@ const principles = [
     </section>
 
     <section class="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-16">
-      <h2 class="text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        What Amonite does not claim
+      <h2 class="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+        {philosophy.limitsHeading}
       </h2>
       <div class="max-w-2xl">
-        <p class="text-base leading-relaxed text-slate">
-          It does not claim to be the fastest, the most secure, or an “AI operating
-          system.” Local AI is one capability among others: desktop, development,
-          administration, networking, and security.
+        <p class="text-base leading-relaxed text-text-muted">
+          {philosophy.limitsBody}
         </p>
-        <p class="mt-4 text-base leading-relaxed text-slate">
-          Technology changes. The selection rule should not.
+        <p class="mt-4 text-base leading-relaxed text-text-muted">
+          {philosophy.limitsClosing}
         </p>
       </div>
     </section>
@@ -112,15 +103,14 @@ const principles = [
     <section class="border-t border-border pt-10">
       <div class="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10">
         <div>
-          <h2 class="text-lg font-semibold text-graphite">From principle to capabilities</h2>
-          <p class="mt-2 text-sm leading-relaxed text-slate">
-            See how day-one work is organized, and how implementation stays subordinate to
-            outcomes.
+          <h2 class="text-lg font-semibold text-text">{philosophy.nextHeading}</h2>
+          <p class="mt-2 text-sm leading-relaxed text-text-muted">
+            {philosophy.nextBody}
           </p>
         </div>
         <div class="flex flex-wrap gap-3">
-          <ActionLink href="/engineering">Engineering</ActionLink>
-          <ActionLink href="/downloads" variant="secondary">Downloads</ActionLink>
+          <ActionLink href={localizedPath(locale, 'engineering')}>{philosophy.engineering}</ActionLink>
+          <ActionLink href={localizedPath(locale, 'downloads')} variant="secondary">{philosophy.downloads}</ActionLink>
         </div>
       </div>
     </section>

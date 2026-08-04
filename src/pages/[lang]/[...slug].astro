@@ -1,0 +1,70 @@
+---
+import HomePage from '../index.astro';
+import PhilosophyPage from '../philosophy.astro';
+import EngineeringPage from '../engineering.astro';
+import GalleryPage from '../gallery.astro';
+import CommunityPage from '../community.astro';
+import DownloadsPage from '../downloads.astro';
+import PrivacyPage from '../privacy.astro';
+import TermsPage from '../terms.astro';
+
+const pages = {
+  index: HomePage,
+  philosophy: PhilosophyPage,
+  engineering: EngineeringPage,
+  gallery: GalleryPage,
+  community: CommunityPage,
+  downloads: DownloadsPage,
+  privacy: PrivacyPage,
+  terms: TermsPage,
+} as const;
+
+const pageNames = [
+  'index',
+  'philosophy',
+  'engineering',
+  'gallery',
+  'community',
+  'downloads',
+  'privacy',
+  'terms',
+] as const;
+
+type PageName = (typeof pageNames)[number];
+type Locale = 'es' | 'pt' | 'it' | 'fr' | 'de' | 'nl';
+
+export function getStaticPaths() {
+  const locales: Locale[] = ['es', 'pt', 'it', 'fr', 'de', 'nl'];
+  const pageNames: PageName[] = [
+    'index',
+    'philosophy',
+    'engineering',
+    'gallery',
+    'community',
+    'downloads',
+    'privacy',
+    'terms',
+  ];
+
+  return locales.flatMap((lang) =>
+    pageNames.map((page) => ({
+      params: {
+        lang,
+        slug: page === 'index' ? undefined : page,
+      },
+      props: {
+        page,
+        locale: lang,
+      },
+    })),
+  );
+}
+
+const { page, locale } = Astro.props as {
+  page: PageName;
+  locale: Locale;
+};
+const Page = pages[page];
+---
+
+<Page locale={locale} />

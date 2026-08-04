@@ -15,19 +15,23 @@ Stylised ammonite. Official assets only (`src/assets/logo.png`, `public/` favico
 
 ## Colour
 
-Neutrals carry the UI. Amber is a sparse accent.
+Neutrals carry the UI. Amber is a sparse accent. Components use semantic
+tokens so the same hierarchy remains legible in light and dark appearances.
 
-| Token           | Value     | Role                        |
-| --------------- | --------- | --------------------------- |
-| amber / primary | `#C08A2B` | Accent, links               |
-| stone           | `#8B8B4A` | Rare earth accent           |
-| sand            | `#DBC3A5` | Soft panels                 |
-| mist            | `#ECEBE1` | Default background          |
-| slate           | `#4A4F57` | Muted text, borders         |
-| graphite        | `#34373D` | Primary text; dark surfaces |
-| deep-green      | `#3D5A40` | Occasional natural accent   |
+| Token             | Light value | Dark value | Role                         |
+| ----------------- | ----------- | ---------- | ---------------------------- |
+| surface           | `#ECEBE1`   | `#1B1E1F`  | Page background              |
+| surface-soft      | `#E8E3D7`   | `#25292A`  | Quiet panels and footer      |
+| surface-inverse   | `#34373D`   | `#2B2F30`  | Hero and emphasis surfaces   |
+| text              | `#34373D`   | `#ECE9DF`  | Primary text                 |
+| text-muted        | `#4A4F57`   | `#B8BCB8`  | Supporting text              |
+| accent            | `#805C17`   | `#E6B85A`  | Accent text and markers      |
+| accent-surface    | `#805C17`   | `#805C17`  | Primary accent controls      |
 
 No saturated blues, purples, neon, or glow chrome.
+
+The appearance selector offers System, Light, and Dark. System follows the
+operating system preference and is the default.
 
 ## Typography
 
@@ -58,4 +62,6 @@ Cyberpunk / RGB spectacle · SaaS landing theatre · fear-based security cliché
 
 ## Accessibility
 
-Readable graphite on mist. Visible focus rings. Honour `prefers-reduced-motion`.
+Semantic contrast pairs are selected for readability in both appearances.
+Focus rings remain visible on light and dark surfaces. Honour
+`prefers-reduced-motion`.

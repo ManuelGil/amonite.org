@@ -5,39 +5,53 @@
  * Renders every public edition from data — does not assume how many exist.
  */
 import { PUBLIC_EDITIONS } from '../../consts';
+import { getCopy, getEditionCopy, getLocale, type Locale } from '../../i18n';
 
 export interface Props {
   class?: string;
+  locale?: Locale;
 }
 
-const { class: className = '' } = Astro.props;
+const { class: className = '', locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const copy = getCopy(locale);
 ---
 
 <ol class:list={['border-t border-border', className]}>
   {
-    PUBLIC_EDITIONS.map((edition, i) => (
-      <li class="grid gap-x-8 gap-y-3 border-b border-border py-6 sm:grid-cols-[3.5rem_10rem_1fr] sm:py-7 lg:grid-cols-[4rem_12rem_1fr]">
-        <span class="font-mono text-sm text-slate/60" aria-hidden="true">
+    PUBLIC_EDITIONS.map((edition, i) => {
+      const editionCopy = getEditionCopy(locale, edition.id);
+      const statusLabel =
+        edition.status === 'available'
+          ? copy.common.available
+          : edition.status === 'experimental'
+            ? copy.common.experimental
+            : edition.statusLabel;
+
+      return (
+        <li class="grid gap-x-8 gap-y-3 border-b border-border py-6 sm:grid-cols-[3.5rem_10rem_1fr] sm:py-7 lg:grid-cols-[4rem_12rem_1fr]">
+        <span class="font-mono text-sm text-text-muted/60" aria-hidden="true">
           {String(i + 1).padStart(2, '0')}
         </span>
         <div>
-          <h3 class="text-base font-semibold tracking-tight text-graphite">
+          <h3 class="text-base font-semibold tracking-tight text-text">
             {edition.name}
           </h3>
-          <p class="label-mono mt-1 text-amber">{edition.statusLabel}</p>
+          <p class="label-mono mt-1 text-accent">{statusLabel}</p>
         </div>
-        <div class="space-y-3 text-sm leading-relaxed text-slate sm:col-start-3">
-          {edition.audience && <p>{edition.audience}</p>}
-          {edition.difference && <p>{edition.difference}</p>}
+        <div class="space-y-3 text-sm leading-relaxed text-text-muted sm:col-start-3">
+          {editionCopy?.audience && <p>{editionCopy.audience}</p>}
+          {editionCopy?.difference && <p>{editionCopy.difference}</p>}
           {edition.role && <p>{edition.role}</p>}
-          <p>{edition.statusDetail}</p>
+          <p>{editionCopy?.statusDetail ?? edition.statusDetail}</p>
           {edition.currentRelease && (
-            <p class="font-mono text-xs text-slate/80">
-              Current release · {edition.currentRelease.version}
+            <p class="font-mono text-xs text-text-muted">
+              {copy.common.currentRelease} · {edition.currentRelease.version}
             </p>
           )}
         </div>
       </li>
-    ))
+      );
+    })
   }
 </ol>

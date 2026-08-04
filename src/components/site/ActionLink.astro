@@ -1,4 +1,6 @@
 ---
+import { getLocale, SHARED_COPY } from '../../i18n';
+
 export interface Props {
   href: string;
   variant?: 'primary' | 'secondary' | 'accent' | 'ghost';
@@ -12,18 +14,20 @@ const {
   class: className = '',
   external = false,
 } = Astro.props;
+const copy = SHARED_COPY[getLocale(Astro.currentLocale)];
 
 const variants = {
-  primary: 'bg-graphite text-mist hover:bg-graphite/90',
-  secondary: 'border border-border bg-mist text-graphite hover:border-slate/40',
-  accent: 'bg-amber text-graphite hover:bg-sand',
-  ghost: 'text-graphite underline decoration-border underline-offset-[5px] hover:decoration-slate',
+  primary: 'bg-surface-inverse text-text-inverse hover:bg-surface-inverse/90',
+  secondary: 'border border-border bg-surface text-text hover:border-text-muted/40',
+  accent:
+    'bg-accent-surface text-accent-foreground hover:bg-accent-hover-surface hover:text-text',
+  ghost: 'text-text underline decoration-border underline-offset-[5px] hover:decoration-text-muted',
 };
 
 const base =
   variant === 'ghost'
-    ? 'inline font-medium'
-    : 'inline-flex items-center justify-center rounded-default px-5 py-2.5 text-sm font-medium transition-colors';
+    ? 'inline-flex min-h-11 items-center font-medium transition-colors'
+    : 'inline-flex min-h-11 items-center justify-center rounded-default px-5 py-2.5 text-sm font-medium transition-colors';
 ---
 
 <a
@@ -32,4 +36,5 @@ const base =
   {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
 >
   <slot />
+  {external && <span class="sr-only"> {copy.opensNewTab}</span>}
 </a>

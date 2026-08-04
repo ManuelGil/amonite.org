@@ -11,67 +11,94 @@ import terminalFastfetch from '../assets/screenshots/terminal-fastfetch.png';
 import {
   DISTRIBUTION,
   PUBLIC_EDITIONS,
-  SITE_DESCRIPTION,
   SOFTWARE_APPLICATION_JSONLD,
 } from '../consts';
+import {
+  getCopy,
+  getLocale,
+  localizedPath,
+  MEDIA_COPY,
+  formatCopy,
+  type Locale,
+} from '../i18n';
 
 const editionNames = PUBLIC_EDITIONS.map((edition) => edition.name).join(' · ');
 const availableEditions = PUBLIC_EDITIONS.filter(
   (edition) => edition.status === 'available',
 );
+export interface Props {
+  locale?: Locale;
+}
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const copy = getCopy(locale);
+const home = copy.home;
+const media = MEDIA_COPY[locale];
 ---
 
 <Layout
-  title="Amonite"
-  description={SITE_DESCRIPTION}
+  locale={locale}
+  title={copy.meta.index.title}
+  description={copy.meta.index.description}
   image={terminalFastfetch}
-  imageAlt="Maximized terminal on Amonite showing fastfetch output with the Amonite ASCII mark and system details"
-  structuredData={[SOFTWARE_APPLICATION_JSONLD]}
+  imageAlt={media.homeTerminalAlt}
+  structuredData={[
+    {
+      ...SOFTWARE_APPLICATION_JSONLD,
+      description: copy.meta.index.description,
+      inLanguage: locale,
+    },
+  ]}
 >
-  <section class="border-b border-border bg-graphite text-mist">
+  <section class="border-b border-border bg-surface-inverse text-text-inverse">
     <div class="mx-auto grid max-w-6xl gap-12 px-6 py-16 sm:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14 lg:py-24">
       <div>
-        <p class="label-mono font-medium text-sand">
-          {`GNU/Linux · ${editionNames}`}
+        <p class="label-mono font-medium text-accent-soft">
+          {formatCopy(home.eyebrow, { editions: editionNames })}
         </p>
-        <h1 class="display-serif mt-4 text-5xl leading-none text-mist sm:text-6xl">
+        <h1 class="display-serif mt-4 text-5xl leading-none text-text-inverse sm:text-6xl">
           {DISTRIBUTION.name}
         </h1>
-        <p class="mt-6 max-w-md text-lg leading-relaxed text-mist/85">
-          {DISTRIBUTION.tagline}
+        <p class="mt-6 max-w-md text-lg leading-relaxed text-text-inverse/85">
+          {copy.product.tagline}
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <ActionLink href="#editions" variant="accent">
-            Official editions
+            {home.editionsEyebrow}
           </ActionLink>
           <ActionLink
-            href="/gallery"
+            href={localizedPath(locale, 'gallery')}
             variant="secondary"
-            class="border-mist/25 bg-transparent text-mist hover:border-mist/50 hover:bg-mist/10"
+            class="border-text-inverse/25 bg-transparent text-text-inverse hover:border-text-inverse/50 hover:bg-text-inverse/10"
           >
-            See the system
+            {copy.nav.gallery}
           </ActionLink>
         </div>
-        <p class="mt-8 font-mono text-xs leading-relaxed text-mist/50">
+        <p class="mt-8 font-mono text-xs leading-relaxed text-text-inverse/75">
           {availableEditions.length > 0
-            ? `${availableEditions.map((edition) => edition.name).join(' and ')} available`
-            : 'Editions'}
+            ? formatCopy(home.available, {
+                editions: availableEditions.map((edition) => edition.name).join(' · '),
+              })
+            : home.editionsEyebrow}
           <br />
           <a
-            href="/downloads"
-            class="underline decoration-mist/30 underline-offset-4 hover:text-mist/80"
-          >Download and verify</a>
+            href={localizedPath(locale, 'downloads')}
+            class="underline decoration-text-inverse/60 underline-offset-4 hover:text-text-inverse"
+          >{home.downloadVerify}</a>
         </p>
       </div>
 
       <Screenshot
         image={terminalFastfetch}
-        alt="Maximized terminal on Amonite showing fastfetch output with the Amonite ASCII mark and system details"
-        caption={`The terminal after boot: fastfetch reporting ${DISTRIBUTION.name} ${DISTRIBUTION.release} as shipped. Unedited capture from the live ISO.`}
+        alt={media.homeTerminalAlt}
+        caption={formatCopy(media.homeTerminalCaption, {
+          name: DISTRIBUTION.name,
+          release: DISTRIBUTION.release,
+        })}
         loading="eager"
         fetchpriority="high"
         sizes="(max-width: 1024px) 100vw, 40rem"
-        captionClass="text-mist/50"
+        captionClass="text-text-inverse/75"
       />
     </div>
   </section>
@@ -79,50 +106,50 @@ const availableEditions = PUBLIC_EDITIONS.filter(
   <section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
     <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
       <div class="lg:order-2">
-        <p class="label-mono font-medium text-amber">What it is</p>
-        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-          An operating system defined by what it enables
+        <p class="label-mono font-medium text-accent">{home.whatItIs}</p>
+        <h2 class="display-serif mt-3 text-2xl text-text sm:text-3xl">
+          {home.whatItIsHeading}
         </h2>
-        <p class="mt-5 text-base leading-relaxed text-slate sm:text-lg">
-          Amonite is a GNU/Linux operating system you can install today. After installation,
-          desktop work, development, administration, networking, and local AI are already
-          available.
+        <p class="mt-5 text-base leading-relaxed text-text-muted sm:text-lg">
+          {home.whatItIsBody}
         </p>
-        <p class="mt-4 text-base leading-relaxed text-slate sm:text-lg">
-          Amonite starts with a simple rule: software earns its place by enabling work.
+        <p class="mt-4 text-base leading-relaxed text-text-muted sm:text-lg">
+          {home.whatItIsRule}
         </p>
         <p class="mt-6">
-          <ActionLink href="/philosophy" variant="ghost">Why Amonite exists →</ActionLink>
+          <ActionLink href={localizedPath(locale, 'philosophy')} variant="ghost">
+            {copy.nav.philosophy} →
+          </ActionLink>
         </p>
       </div>
       <Screenshot
         image={firstBoot}
-        alt="Amonite live session at first boot with the Welcome handbook and installer open on an empty desktop"
-        caption="First boot of the live session: the Welcome handbook and the installer, nothing else."
+        alt={media.homeFirstBootAlt}
+        caption={media.homeFirstBootCaption}
         class="lg:order-1"
         sizes="(max-width: 1024px) 100vw, 40rem"
       />
     </div>
   </section>
 
-  <section id="editions" class="border-y border-border bg-sand/15">
+  <section id="editions" class="border-y border-border bg-surface-soft">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
       <div class="max-w-2xl">
-        <p class="label-mono font-medium text-amber">Official editions</p>
-        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-          One product. Multiple editions.
+        <p class="label-mono font-medium text-accent">{home.editionsEyebrow}</p>
+        <h2 class="display-serif mt-3 text-2xl text-text sm:text-3xl">
+          {home.editionsHeading}
         </h2>
-        <p class="mt-4 text-base leading-relaxed text-slate">
-          Each edition has its own release lifecycle.
+        <p class="mt-4 text-base leading-relaxed text-text-muted">
+          {home.editionsIntro}
         </p>
-        <p class="mt-3 text-base leading-relaxed text-slate">
-          Public editions belong to the current {DISTRIBUTION.series} release series.
+        <p class="mt-3 text-base leading-relaxed text-text-muted">
+          {formatCopy(home.editionsSeries, { series: DISTRIBUTION.series })}
         </p>
       </div>
-      <EditionOverview class="mt-12" />
-      <p class="mt-8 text-sm text-slate">
-        <ActionLink href="/downloads" variant="ghost">
-          Go to current releases →
+      <EditionOverview locale={locale} class="mt-12" />
+      <p class="mt-8 text-sm text-text-muted">
+        <ActionLink href={localizedPath(locale, 'downloads')} variant="ghost">
+          {copy.common.downloads} →
         </ActionLink>
       </p>
     </div>
@@ -130,19 +157,18 @@ const availableEditions = PUBLIC_EDITIONS.filter(
 
   <section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
     <div class="max-w-2xl">
-      <p class="label-mono font-medium text-amber">Capabilities</p>
-      <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-        What becomes possible after install
+      <p class="label-mono font-medium text-accent">{home.capabilitiesEyebrow}</p>
+      <h2 class="display-serif mt-3 text-2xl text-text sm:text-3xl">
+        {home.capabilitiesHeading}
       </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        The system is defined by the work it is ready for on day one. Each of these {DISTRIBUTION.capabilities.length}
-        capabilities has a reason to be here.
+      <p class="mt-4 text-base leading-relaxed text-text-muted">
+        {formatCopy(home.capabilitiesIntro, { count: copy.product.capabilities.length })}
       </p>
     </div>
-    <CapabilityIndex class="mt-12" />
-    <p class="mt-6 text-sm text-slate">
-      <ActionLink href="/engineering" variant="ghost">
-        How each capability is realized →
+    <CapabilityIndex locale={locale} class="mt-12" />
+    <p class="mt-6 text-sm text-text-muted">
+      <ActionLink href={localizedPath(locale, 'engineering')} variant="ghost">
+        {copy.nav.engineering} →
       </ActionLink>
     </p>
   </section>
@@ -150,81 +176,55 @@ const availableEditions = PUBLIC_EDITIONS.filter(
   <section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
     <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-14">
       <div>
-        <p class="label-mono font-medium text-amber">Local Artificial Intelligence</p>
-        <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-          Inference on your machine
+        <p class="label-mono font-medium text-accent">{home.localAiEyebrow}</p>
+        <h2 class="display-serif mt-3 text-2xl text-text sm:text-3xl">
+          {home.localAiHeading}
         </h2>
-        <p class="mt-4 text-base leading-relaxed text-slate">
-          Local AI is one deliberate capability of the platform. It is not a label for the
-          whole operating system.
+        <p class="mt-4 text-base leading-relaxed text-text-muted">
+          {home.localAiIntro}
         </p>
-        <p class="mt-4 text-base leading-relaxed text-slate">
-          Models and prompts stay on your hardware. Nothing depends on an external service.
+        <p class="mt-4 text-base leading-relaxed text-text-muted">
+          {home.localAiOwnership}
         </p>
       </div>
-      <ul class="divide-y divide-border border-y border-border text-sm leading-relaxed text-slate">
-        <li class="py-3">Execute compatible GGUF models locally</li>
-        <li class="py-3">Run inference entirely offline</li>
-        <li class="py-3">Keep models and prompts under your control</li>
-        <li class="py-3">Use an OpenAI-compatible API for local applications</li>
-        <li class="py-3">Build workflows without external services</li>
+      <ul class="divide-y divide-border border-y border-border text-sm leading-relaxed text-text-muted">
+        {home.localAiList.map((item) => <li class="py-3">{item}</li>)}
       </ul>
     </div>
   </section>
 
-  <section class="border-t border-border bg-sand/15">
+  <section class="border-t border-border bg-surface-soft">
     <div class="mx-auto max-w-6xl px-6 py-14 sm:py-16">
-      <DownloadPanel />
+      <DownloadPanel locale={locale} />
     </div>
   </section>
 
   <section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
     <div class="max-w-2xl">
-      <p class="label-mono font-medium text-amber">Continue</p>
-      <h2 class="display-serif mt-3 text-2xl text-graphite sm:text-3xl">
-        Where to go next
+      <p class="label-mono font-medium text-accent">{home.continueEyebrow}</p>
+      <h2 class="display-serif mt-3 text-2xl text-text sm:text-3xl">
+        {home.continueHeading}
       </h2>
     </div>
-    <nav aria-label="Site sections" class="mt-10 border-t border-border">
+    <nav aria-label={home.continueHeading} class="mt-10 border-t border-border">
       {
-        [
-          {
-            href: '/philosophy',
-            title: 'Philosophy',
-            description: 'Why every capability must justify its presence.',
-          },
-          {
-            href: '/engineering',
-            title: 'Engineering',
-            description: 'How capabilities are realized, and what stays replaceable.',
-          },
-          {
-            href: '/gallery',
-            title: 'Gallery',
-            description: 'The system as shipped, captured from the live ISO.',
-          },
-          {
-            href: '/community',
-            title: 'Community',
-            description: 'Discuss on r/Amonite. Download official releases from GitHub Releases.',
-          },
-        ].map((item, i) => (
+        home.continueItems.map((item, i) => (
           <a
-            href={item.href}
-            class="group grid gap-x-8 gap-y-1 border-b border-border py-5 transition-colors hover:bg-sand/15 sm:grid-cols-[4rem_12rem_1fr_auto] sm:items-baseline"
+            href={localizedPath(locale, item.page === 'index' ? '' : item.page)}
+            class="group grid gap-x-8 gap-y-1 border-b border-border py-5 transition-colors hover:bg-surface-soft sm:grid-cols-[4rem_12rem_1fr_auto] sm:items-baseline"
           >
-            <span class="font-mono text-sm text-slate/60" aria-hidden="true">
+            <span class="font-mono text-sm text-text-muted/60" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </span>
-            <span class="text-base font-semibold tracking-tight text-graphite">
+            <span class="text-base font-semibold tracking-tight text-text">
               {item.title}
             </span>
-            <span class="text-sm leading-relaxed text-slate">{item.description}</span>
+            <span class="text-sm leading-relaxed text-text-muted">{item.description}</span>
             <span
-              class="hidden text-sm font-medium text-amber transition-transform group-hover:translate-x-0.5 sm:inline"
+              class="hidden text-sm font-medium text-accent transition-transform group-hover:translate-x-0.5 sm:inline"
               aria-hidden="true"
             >
-              →
+              {copy.common.continueArrow}
             </span>
           </a>
         ))
@@ -232,5 +232,5 @@ const availableEditions = PUBLIC_EDITIONS.filter(
     </nav>
   </section>
 
-  <ProjectSupport />
+  <ProjectSupport locale={locale} />
 </Layout>

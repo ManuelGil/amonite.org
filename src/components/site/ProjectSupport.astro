@@ -4,35 +4,42 @@
  */
 import ActionLink from './ActionLink.astro';
 import { SITE_AUTHOR, SPONSORS_URL } from '../../consts';
+import { getLocale, SHARED_COPY, type Locale } from '../../i18n';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const copy = SHARED_COPY[locale];
 ---
 
 <section class="border-t border-border">
   <div class="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:py-20 lg:grid-cols-2 lg:gap-14">
     <div>
-      <p class="label-mono font-medium text-amber">Authorship</p>
-      <h2 class="mt-3 text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        An independent project
+      <p class="label-mono font-medium text-accent">{copy.authorship}</p>
+      <h2 class="mt-3 text-xl font-semibold tracking-tight text-text sm:text-2xl">
+        {copy.independentProject}
       </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        Amonite is an independent GNU/Linux distribution designed, built, tested, cryptographically
-        signed, and maintained by {SITE_AUTHOR}.
+      <p class="mt-4 text-base leading-relaxed text-text-muted">
+        {copy.independentBody.replace('Manuel Gil', SITE_AUTHOR)}
       </p>
     </div>
 
     <div>
-      <p class="label-mono font-medium text-amber">Sponsorship</p>
-      <h2 class="mt-3 text-xl font-semibold tracking-tight text-graphite sm:text-2xl">
-        Sustaining the work
+      <p class="label-mono font-medium text-accent">{copy.sponsorship}</p>
+      <h2 class="mt-3 text-xl font-semibold tracking-tight text-text sm:text-2xl">
+        {copy.sustainingWork}
       </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        Sponsorship helps sustain development, testing, infrastructure, hardware, documentation, and long-term maintenance.
+      <p class="mt-4 text-base leading-relaxed text-text-muted">
+        {copy.sponsorshipBody}
       </p>
-      <p class="mt-4 text-base leading-relaxed text-slate">
-        It is optional, and available through GitHub Sponsors.
+      <p class="mt-4 text-base leading-relaxed text-text-muted">
+        {copy.sponsorshipOptional}
       </p>
       <p class="mt-6">
         <ActionLink href={SPONSORS_URL} variant="secondary" external>
-          GitHub Sponsors
+          {copy.githubSponsors}
         </ActionLink>
       </p>
     </div>

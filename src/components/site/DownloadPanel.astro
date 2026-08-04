@@ -4,48 +4,68 @@
  */
 import ActionLink from './ActionLink.astro';
 import { DISTRIBUTION, PUBLIC_EDITIONS } from '../../consts';
+import {
+  formatCopy,
+  getCopy,
+  getLocale,
+  getReleaseCopy,
+  localizedPath,
+  SHARED_COPY,
+  type Locale,
+} from '../../i18n';
 
+export interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const copy = getCopy(locale);
+const shared = SHARED_COPY[locale];
+const releaseCopy = getReleaseCopy(locale, DISTRIBUTION.editionId, DISTRIBUTION.release);
 const availableEditions = PUBLIC_EDITIONS.filter(
   (edition) => edition.status === 'available',
 );
 const availableLabel =
   availableEditions.length > 0
-    ? `${availableEditions.map((edition) => edition.name).join(' and ')} available`
-    : 'Editions';
+    ? formatCopy(copy.home.available, {
+        editions: availableEditions.map((edition) => edition.name).join(' · '),
+      })
+    : copy.home.editionsEyebrow;
 ---
 
-<aside class="border border-border bg-graphite text-mist">
+<aside class="border border-border bg-surface-inverse text-text-inverse">
   <div class="grid gap-8 p-8 sm:p-10 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:gap-12">
     <div>
-      <p class="label-mono font-medium text-sand">
-        {DISTRIBUTION.editionName} · {DISTRIBUTION.releaseLabel}
+      <p class="label-mono font-medium text-accent-soft">
+        {DISTRIBUTION.editionName} · {releaseCopy.label}
       </p>
       <h2 class="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">
-        Get the operating system
+        {copy.nav.downloads}
       </h2>
-      <p class="mt-3 max-w-xl text-sm leading-relaxed text-mist/75 sm:text-[0.95rem] sm:leading-relaxed">
-        {`${availableLabel}. Download and verify current releases.`}
+      <p class="mt-3 max-w-xl text-sm leading-relaxed text-text-inverse/75 sm:text-[0.95rem] sm:leading-relaxed">
+        {`${availableLabel}. ${copy.home.downloadVerify}.`}
       </p>
-      <p class="mt-5 font-mono text-xs text-mist/50">
-        {DISTRIBUTION.isoFileName} · SHA256 · GPG signed
+      <p class="mt-5 font-mono text-xs text-text-inverse/75">
+        {DISTRIBUTION.isoFileName} · SHA256 · {shared.signed}
       </p>
     </div>
 
     <div class="flex flex-col gap-3 sm:items-stretch lg:items-end">
       <ActionLink
-        href="/downloads"
+        href={localizedPath(locale, 'downloads')}
         variant="accent"
         class="w-full justify-center sm:w-auto"
       >
-        Downloads & verification
+        {copy.common.downloads} & {copy.common.verificationGuide}
       </ActionLink>
       <ActionLink
         href={DISTRIBUTION.artifacts.releaseNotes.href}
         variant="ghost"
         external
-        class="text-center text-mist/80 decoration-mist/30 hover:text-mist hover:decoration-mist/60 sm:text-right"
+        class="text-center text-text-inverse/90 decoration-text-inverse/60 hover:text-text-inverse hover:decoration-text-inverse sm:text-right"
       >
-        {`Open ${DISTRIBUTION.editionName} release`}
+        {`${copy.common.openRelease} · ${DISTRIBUTION.editionName}`}
       </ActionLink>
     </div>
   </div>

@@ -2,19 +2,22 @@
 
 @theme {
   /*
-   * Amonite identity tokens. Intent: docs/VISUAL.md.
+   * Semantic tokens. Their values change with the appearance preference
+   * below; components should use these names instead of raw color roles.
    */
-  --color-primary: #c08a2b;
-  --color-amber: #c08a2b;
-  --color-stone: #8b8b4a;
-  --color-sand: #dbc3a5;
-  --color-mist: #ecebe1;
-  --color-slate: #4a4f57;
-  --color-graphite: #34373d;
-  --color-deep-green: #3d5a40;
-  --color-background-light: #ecebe1;
-  --color-background-dark: #34373d;
-  --color-border: color-mix(in srgb, #4a4f57 22%, #ecebe1);
+  --color-surface: var(--surface-page);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-text: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-accent: var(--accent);
+  --color-accent-surface: var(--accent-surface);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-hover-surface: var(--accent-hover-surface);
+  --color-border: var(--border-color);
+  --color-border-strong: var(--border-strong);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -26,6 +29,65 @@
   --radius-xl: 0.5rem;
 }
 
+:root {
+  color-scheme: light;
+  --surface-page: #ecebe1;
+  --surface-soft: #e8e3d7;
+  --surface-inverse: #34373d;
+  --text-primary: #34373d;
+  --text-muted: #4a4f57;
+  --text-inverse: #ecebe1;
+  --accent: #805c17;
+  --accent-surface: #805c17;
+  --accent-foreground: #ecebe1;
+  --accent-soft: #dbc3a5;
+  --accent-hover-surface: #dbc3a5;
+  --border-color: color-mix(in srgb, #4a4f57 22%, #ecebe1);
+  --border-strong: color-mix(in srgb, #4a4f57 40%, #ecebe1);
+  --focus-color: #805c17;
+  --selection-background: #dbc3a5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --surface-page: #1b1e1f;
+    --surface-soft: #25292a;
+    --surface-inverse: #2b2f30;
+    --text-primary: #ece9df;
+    --text-muted: #b8bcb8;
+    --text-inverse: #f2efe5;
+    --accent: #e6b85a;
+    --accent-surface: #805c17;
+    --accent-foreground: #f2efe5;
+    --accent-soft: #d3b66f;
+    --accent-hover-surface: #5a4c31;
+    --border-color: color-mix(in srgb, #b8bcb8 25%, #1b1e1f);
+    --border-strong: color-mix(in srgb, #b8bcb8 42%, #1b1e1f);
+    --focus-color: #f0c873;
+    --selection-background: #5a4c31;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --surface-page: #1b1e1f;
+  --surface-soft: #25292a;
+  --surface-inverse: #2b2f30;
+  --text-primary: #ece9df;
+  --text-muted: #b8bcb8;
+  --text-inverse: #f2efe5;
+  --accent: #e6b85a;
+  --accent-surface: #805c17;
+  --accent-foreground: #f2efe5;
+  --accent-soft: #d3b66f;
+  --accent-hover-surface: #5a4c31;
+  --border-color: color-mix(in srgb, #b8bcb8 25%, #1b1e1f);
+  --border-strong: color-mix(in srgb, #b8bcb8 42%, #1b1e1f);
+  --focus-color: #f0c873;
+  --selection-background: #5a4c31;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -33,6 +95,13 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      scroll-padding-top: 5rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -50,18 +119,44 @@
   }
 
   body {
-    @apply bg-mist font-sans text-graphite antialiased;
+    @apply bg-surface font-sans text-text antialiased;
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background-color: color-mix(in srgb, var(--color-sand) 70%, var(--color-mist));
-    color: var(--color-graphite);
+    background-color: var(--selection-background);
+    color: var(--text-primary);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-amber);
+    outline: 3px solid var(--focus-color);
     outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--surface-page);
+  }
+
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 2px solid CanvasText;
+      box-shadow: none;
+    }
+  }
+
+  :target {
+    scroll-margin-top: 7rem;
+  }
+
+  @media (min-width: 768px) {
+    :target {
+      scroll-margin-top: 5rem;
+    }
+  }
+
+  a {
+    transition:
+      color 150ms ease,
+      background-color 150ms ease,
+      border-color 150ms ease,
+      text-decoration-color 150ms ease;
   }
 
   @font-face {
@@ -102,6 +197,13 @@
     font-family: var(--font-serif);
     font-weight: 400;
     letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 
   /*

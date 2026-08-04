@@ -1,37 +1,72 @@
 ---
 import Logo from '../shared/Logo.astro';
 import { COMMUNITY_URL, DOWNLOAD_URL } from '../../consts';
+import {
+  LOCALE_LABELS,
+  LOCALES,
+  getCopy,
+  localizedPath,
+  SHARED_COPY,
+  type Locale,
+} from '../../i18n';
 
-const path = Astro.url.pathname;
+interface Props {
+  locale: Locale;
+}
 
+const { locale } = Astro.props;
+const copy = getCopy(locale);
+const shared = SHARED_COPY[locale];
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const segments = path.split('/').filter(Boolean);
+if (segments[0] === locale) segments.shift();
+const currentPage = segments[0] ?? '';
+const isHome = currentPage === '';
 const links = [
-  { href: '/philosophy', label: 'Philosophy' },
-  { href: '/engineering', label: 'Engineering' },
-  { href: '/gallery', label: 'Gallery' },
-  { href: '/community', label: 'Community' },
-  { href: '/downloads', label: 'Downloads' },
+  { href: 'philosophy', label: copy.nav.philosophy },
+  { href: 'engineering', label: copy.nav.engineering },
+  { href: 'gallery', label: copy.nav.gallery },
+  { href: 'community', label: copy.nav.community },
+  { href: 'downloads', label: copy.nav.downloads },
 ];
 
 function isActive(href: string) {
-  return path === href || path.startsWith(`${href}/`);
+  return currentPage === href || currentPage.startsWith(`${href}/`);
 }
+
+const languageLinks = LOCALES.map((language) => ({
+  language,
+  href: localizedPath(language, currentPage),
+  label: LOCALE_LABELS[language],
+}));
+
+const appearanceOptions = [
+  { value: 'system', label: copy.appearance.system },
+  { value: 'light', label: copy.appearance.light },
+  { value: 'dark', label: copy.appearance.dark },
+] as const;
 ---
 
-<header class="sticky top-0 z-40 border-b border-border/80 bg-mist/95 backdrop-blur-sm">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3.5">
-    <a href="/" class="flex items-center gap-2 text-graphite" aria-label="Amonite home">
+<header class="sticky top-0 z-40 border-b border-border/80 bg-surface/95 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-2 sm:gap-6 sm:py-2.5">
+    <a
+      href={localizedPath(locale)}
+      class="flex min-h-11 items-center gap-2 text-text"
+      aria-label={shared.home}
+      aria-current={isHome ? 'page' : undefined}
+    >
       <Logo size="sm" />
       <span class="text-sm font-semibold tracking-tight">Amonite</span>
     </a>
 
-    <nav aria-label="Primary" class="hidden items-center gap-x-6 text-sm md:flex">
+    <nav aria-label={shared.navigation} class="hidden items-center gap-x-5 text-sm md:flex lg:gap-x-6">
       {
         links.map((link) => (
           <a
-            href={link.href}
+            href={localizedPath(locale, link.href)}
             class:list={[
-              'font-medium transition-colors',
-              isActive(link.href) ? 'text-amber' : 'text-slate hover:text-graphite',
+              'inline-flex min-h-11 items-center font-medium transition-colors',
+              isActive(link.href) ? 'text-accent' : 'text-text-muted hover:text-text',
             ]}
             aria-current={isActive(link.href) ? 'page' : undefined}
           >
@@ -41,34 +76,210 @@ function isActive(href: string) {
       }
     </nav>
 
-    <div class="flex items-center gap-3 text-sm">
-      <a href={DOWNLOAD_URL} class="hidden font-medium text-slate hover:text-graphite sm:inline">
-        Releases
+    <div class="flex items-center gap-2 text-sm sm:gap-3">
+      <details class="site-options relative">
+        <summary
+          class="site-options__trigger inline-flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-default px-2.5 font-medium text-text-muted transition-colors hover:text-text sm:px-3"
+          aria-label={`${copy.settingsLabel}: ${LOCALE_LABELS[locale]}`}
+        >
+          <span aria-hidden="true" class="text-sm tracking-tight">
+            {LOCALE_LABELS[locale]}
+          </span>
+          <span aria-hidden="true" class="site-options__chevron text-[0.65rem] leading-none">
+            ▾
+          </span>
+        </summary>
+
+        <div
+          class="site-options__panel absolute right-0 top-full z-50 mt-1.5 w-[min(18.5rem,calc(100vw-1.5rem))] rounded-default border border-border bg-surface p-3 shadow-sm"
+        >
+          <fieldset class="m-0 min-w-0 border-0 p-0">
+            <legend class="label-mono mb-2 px-0.5 font-medium text-accent">
+              {copy.appearanceLabel}
+            </legend>
+            <div class="site-options__appearance grid grid-cols-3 gap-px overflow-hidden rounded-default border border-border bg-border">
+              {
+                appearanceOptions.map((option) => (
+                  <label class="site-options__choice relative min-h-11 cursor-pointer bg-surface text-center text-xs font-medium text-text-muted transition-colors hover:text-text has-[:focus-visible]:z-10">
+                    <input
+                      type="radio"
+                      name="amonite-appearance"
+                      value={option.value}
+                      class="peer sr-only"
+                      data-theme-option={option.value}
+                      checked={option.value === 'system'}
+                    />
+                    <span class="flex h-full min-h-11 items-center justify-center px-1 peer-checked:bg-surface-soft peer-checked:font-semibold peer-checked:text-text">
+                      {option.label}
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="mt-4">
+            <p id="site-options-language-label" class="label-mono mb-1.5 px-0.5 font-medium text-accent">
+              {copy.languageLabel}
+            </p>
+            <nav
+              aria-labelledby="site-options-language-label"
+              class="flex flex-col"
+            >
+              {
+                languageLinks.map(({ language, href, label }) => (
+                  <a
+                    href={href}
+                    class:list={[
+                      'inline-flex min-h-11 items-center rounded-default px-2.5 text-sm transition-colors',
+                      language === locale
+                        ? 'bg-surface-soft font-semibold text-text'
+                        : 'font-medium text-text-muted hover:bg-surface-soft/70 hover:text-text',
+                    ]}
+                    aria-current={language === locale ? 'true' : undefined}
+                    hreflang={language}
+                    lang={language}
+                  >
+                    {label}
+                  </a>
+                ))
+              }
+            </nav>
+          </div>
+        </div>
+      </details>
+
+      <a
+        href={DOWNLOAD_URL}
+        class="hidden min-h-11 items-center font-medium text-text-muted transition-colors hover:text-text md:inline-flex"
+      >
+        {copy.nav.releases}
       </a>
       <a
-        href="/downloads"
-        class="inline-flex items-center justify-center rounded-default bg-graphite px-3.5 py-1.5 text-sm font-medium text-mist hover:bg-graphite/90"
+        href={localizedPath(locale, 'downloads')}
+        class="inline-flex min-h-11 items-center justify-center rounded-default bg-surface-inverse px-3 text-sm font-medium text-text-inverse transition-colors hover:bg-surface-inverse/90 sm:px-3.5"
       >
-        Download
+        {copy.nav.download}
       </a>
     </div>
   </div>
 
-  <nav aria-label="Mobile" class="flex gap-4 overflow-x-auto border-t border-border/60 px-6 py-2.5 text-sm md:hidden">
-    {
-      links.map((link) => (
-        <a
-          href={link.href}
-          class:list={[
-            'shrink-0 font-medium',
-            isActive(link.href) ? 'text-amber' : 'text-slate',
-          ]}
-          aria-current={isActive(link.href) ? 'page' : undefined}
-        >
-          {link.label}
-        </a>
-      ))
-    }
-    <a href={COMMUNITY_URL} class="shrink-0 font-medium text-slate">r/Amonite</a>
+  <nav aria-label={copy.nav.mobile} class="border-t border-border/60 px-6 py-1.5 text-sm md:hidden">
+    <div class="mx-auto flex max-w-6xl flex-wrap gap-x-4 gap-y-0.5">
+      {
+        links.map((link) => (
+          <a
+            href={localizedPath(locale, link.href)}
+            class:list={[
+              'inline-flex min-h-11 items-center font-medium transition-colors',
+              isActive(link.href) ? 'text-accent' : 'text-text-muted hover:text-text',
+            ]}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        href={COMMUNITY_URL}
+        class="inline-flex min-h-11 items-center font-medium text-text-muted transition-colors hover:text-text"
+      >r/Amonite</a>
+    </div>
   </nav>
 </header>
+
+<style>
+  .site-options > summary {
+    list-style: none;
+  }
+
+  .site-options > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .site-options[open] > .site-options__trigger {
+    color: var(--text-primary);
+  }
+
+  .site-options[open] .site-options__chevron {
+    transform: rotate(180deg);
+  }
+
+  .site-options__chevron {
+    display: inline-block;
+    transition: transform 120ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-options__chevron {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const menu = document.querySelector('.site-options');
+    if (!(menu instanceof HTMLDetailsElement)) return;
+
+    const options = menu.querySelectorAll('[data-theme-option]');
+
+    function readPreference() {
+      try {
+        const saved = localStorage.getItem('amonite-theme');
+        if (saved === 'light' || saved === 'dark') return saved;
+      } catch {
+        // System remains the default when storage is unavailable.
+      }
+      return 'system';
+    }
+
+    function applyPreference(preference) {
+      if (preference === 'system') {
+        root.removeAttribute('data-theme');
+      } else {
+        root.dataset.theme = preference;
+      }
+
+      try {
+        localStorage.setItem('amonite-theme', preference);
+      } catch {
+        // The current page still changes when persistent storage is unavailable.
+      }
+    }
+
+    function syncRadios(preference) {
+      options.forEach((input) => {
+        if (!(input instanceof HTMLInputElement)) return;
+        input.checked = input.value === preference;
+      });
+    }
+
+    syncRadios(readPreference());
+
+    options.forEach((input) => {
+      input.addEventListener('change', () => {
+        if (!(input instanceof HTMLInputElement) || !input.checked) return;
+        applyPreference(input.value);
+      });
+    });
+
+    function closeMenu() {
+      menu.open = false;
+    }
+
+    document.addEventListener('pointerdown', (event) => {
+      if (!menu.open) return;
+      if (event.target instanceof Node && menu.contains(event.target)) return;
+      closeMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !menu.open) return;
+      closeMenu();
+      const trigger = menu.querySelector('summary');
+      if (trigger instanceof HTMLElement) trigger.focus();
+    });
+  })();
+</script>
